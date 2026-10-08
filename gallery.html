@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Archival Photo Gallery of the Harish-Chandra Research Centre, School of Basic Sciences, CSJMU Kanpur. Photographs from annual colloquia, ceremonies, and historical ephemera.">
+  <title>Gallery | Harish-Chandra Research Centre</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="header-topbar">
+    <div class="container">
+      <div class="header-topbar-collab">
+        <span>School of Basic Sciences</span>
+        <span class="dot">·</span>
+        <span>CSJMU Kanpur</span>
+        <span class="dot">×</span>
+        <span class="full-text">In collaboration with IIT Kanpur</span>
+      </div>
+      <div>
+        <span>Archival Photographic Repository</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand-lockup">
+        <div class="brand-logos">
+          <img src="assets/logo/hrc-logo.png" alt="Harish-Chandra Research Centre Logo" class="brand-logo-img hrc-logo">
+          <div class="brand-separator"></div>
+          <img src="assets/logo/csjmu.png" alt="CSJMU Logo" class="brand-logo-img">
+          <img src="assets/logo/iitk.png" alt="IIT Kanpur Logo" class="brand-logo-img">
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Harish-Chandra Research Centre</span>
+          <span class="brand-subtitle">School of Basic Sciences</span>
+          <span class="brand-institution">CSJMU · Kanpur</span>
+        </div>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="harishchandra.html" class="nav-link">Dr. Harishchandra</a></li>
+          <li><a href="research.html" class="nav-link">Research</a></li>
+          <li><a href="lectures.html" class="nav-link">Lectures</a></li>
+          <li><a href="people.html" class="nav-link">People</a></li>
+          <li><a href="exhibition/index.html" class="nav-link nav-highlight">Digital Legacy</a></li>
+          <li><a href="events.html" class="nav-link">Events</a></li>
+          <li><a href="gallery.html" class="nav-link active">Gallery</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Open Navigation Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+    <div class="mobile-nav-panel">
+      <div class="mobile-nav-header">
+        <span class="drawer-title">Navigation Menu</span>
+        <button class="mobile-nav-close" aria-label="Close Navigation Menu">&times;</button>
+      </div>
+      <ul class="mobile-nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About the Centre</a></li>
+        <li><a href="harishchandra.html">Dr. Harishchandra</a></li>
+        <li><a href="research.html">Research & Taxonomy</a></li>
+        <li><a href="lectures.html">Lecture Archive</a></li>
+        <li><a href="people.html">Academic People</a></li>
+        <li><a href="exhibition/index.html">Digital Legacy 2026</a></li>
+        <li><a href="events.html">Events & Seminars</a></li>
+        <li><a href="gallery.html" class="nav-highlight">Photo Archive</a></li>
+        <li><a href="contact.html">Institutional Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="section section-alt" style="padding: 3.8rem 0;">
+    <div class="container">
+      <div class="chapter-badge">VISUAL ARCHIVES</div>
+      <span class="eyebrow">PHOTOGRAPHIC CATALOGUE</span>
+      <h1 style="margin-top: 0.4rem; margin-bottom: 0.8rem;">Institutional & Archival Gallery</h1>
+      <p style="font-size: 1.15rem; color: var(--slate); max-width: 800px;">
+        Curated visual records documenting the inaugural ceremonies, annual lectures, student deliberations, and historical documentation of Dr. Harish-Chandra.
+      </p>
+    </div>
+  </section>
+
+  <!-- Gallery Grid Section with Lightbox support -->
+  <section class="section">
+    <div class="container">
+      
+      <div class="gallery-grid">
+
+        <!-- Item 1 -->
+        <div class="gallery-item" onclick="openLightboxFromData('Inauguration Ceremony 2024', 'Formal inauguration of the Harish-Chandra Research Centre at CSJMU Kanpur.')" data-reveal>
+          <div class="gallery-thumb-container editorial-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span class="ph-title">Inaugural Lighting & Commemoration</span>
+            <span class="ph-note">OCTOBER 2024</span>
+          </div>
+          <div class="gallery-caption-bar">
+            <div class="gallery-item-title">Inaugural Assembly</div>
+            <div class="gallery-item-year">Annual Lecture Series 2024</div>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="gallery-item" onclick="openLightboxFromData('Keynote Address by IIT Kanpur Leadership', 'Prof. Manindra Agrawal delivering the keynote address on scientific rigour.')" data-reveal>
+          <div class="gallery-thumb-container editorial-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span class="ph-title">IIT Kanpur Collaboration Address</span>
+            <span class="ph-note">OCTOBER 2024</span>
+          </div>
+          <div class="gallery-caption-bar">
+            <div class="gallery-item-title">Keynote Scientific Address</div>
+            <div class="gallery-item-year">CSJMU × IIT Kanpur Collaboration</div>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="gallery-item" onclick="openLightboxFromData('Address by Vice Chancellor CSJMU', 'Prof. Vinay Kumar Pathak presenting the founding vision for the Centre.')" data-reveal>
+          <div class="gallery-thumb-container editorial-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span class="ph-title">Address by Vice Chancellor CSJMU</span>
+            <span class="ph-note">OCTOBER 2024</span>
+          </div>
+          <div class="gallery-caption-bar">
+            <div class="gallery-item-title">Vice Chancellor Address</div>
+            <div class="gallery-item-year">School of Basic Sciences</div>
+          </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="gallery-item" onclick="openLightboxFromData('Historical Document: Cambridge Matriculation', 'Archival record of Harish-Chandra under P. A. M. Dirac at Cambridge.')" data-reveal>
+          <div class="gallery-thumb-container editorial-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span class="ph-title">Cambridge Archival Ephemera</span>
+            <span class="ph-note">HISTORICAL 1945</span>
+          </div>
+          <div class="gallery-caption-bar">
+            <div class="gallery-item-title">Cambridge Archival Document</div>
+            <div class="gallery-item-year">Biographical Digital Collection</div>
+          </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="gallery-item" onclick="openLightboxFromData('IAS Princeton Mathematical Seminar', 'Institute for Advanced Study, Princeton seminar records.')" data-reveal>
+          <div class="gallery-thumb-container editorial-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span class="ph-title">IAS Princeton Memorial Records</span>
+            <span class="ph-note">HISTORICAL 1963</span>
+          </div>
+          <div class="gallery-caption-bar">
+            <div class="gallery-item-title">Institute for Advanced Study</div>
+            <div class="gallery-item-year">IBM von Neumann Professorship</div>
+          </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="gallery-item" onclick="openLightboxFromData('Student Colloquium & Deliberation 2025', 'Doctoral and masters scholars discussing representation theory in the School seminar hall.')" data-reveal>
+          <div class="gallery-thumb-container editorial-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span class="ph-title">Student Colloquium 2025</span>
+            <span class="ph-note">NOVEMBER 2025</span>
+          </div>
+          <div class="gallery-caption-bar">
+            <div class="gallery-item-title">Research Colloquium Session</div>
+            <div class="gallery-item-year">School of Basic Sciences</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Container for Dynamic Supabase Albums -->
+      <div id="public-albums-container"></div>
+
+      <!-- Container for Dynamic Supabase Year-Grouped Posters -->
+      <div id="public-posters-container" style="margin-top: 3rem;"></div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX MODAL -->
+  <div id="lightbox-modal" class="lightbox-modal" role="dialog" aria-modal="true" aria-label="Photograph Lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close Lightbox">&times;</button>
+      <div class="lightbox-image-wrap editorial-placeholder" style="min-height: 400px; aspect-ratio: 16/9; background: var(--navy); border: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 48px; height: 48px; stroke: var(--champagne);">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+        <div style="color: var(--champagne); font-family: var(--font-heading); font-size: 1.15rem; margin-top: 0.6rem;">OFFICIAL ARCHIVAL PHOTOGRAPH</div>
+        <div style="font-size: 0.74rem; color: rgba(255, 255, 255, 0.65); letter-spacing: 0.1em; text-transform: uppercase;">Harish-Chandra Research Centre · CSJMU Kanpur</div>
+      </div>
+      <div class="lightbox-info">
+        <div>
+          <div class="lightbox-title" id="lightbox-title">Archival Record</div>
+          <div class="lightbox-sub" id="lightbox-caption">School of Basic Sciences</div>
+        </div>
+        <button class="btn btn-sm btn-outline" onclick="closeLightbox()">Close (Esc)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <div class="footer-brand">
+          <h3>Harish-Chandra Research Centre</h3>
+          <p>
+            School of Basic Sciences<br>
+            CSJMU, Kanpur · In collaboration with IIT Kanpur
+          </p>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Navigation</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About the Centre</a></li>
+            <li><a href="gallery.html">Photo Archive</a></li>
+            <li><a href="lectures.html">Lecture Archive</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Digital Legacy</div>
+          <ul class="footer-links">
+            <li><a href="exhibition/index.html">Exhibition Pavilion</a></li>
+            <li><a href="exhibition/archive.html">03 · Digital Archive</a></li>
+            <li><a href="exhibition/then-and-now.html">11 · Then & Now</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Contact</div>
+          <ul class="footer-links">
+            <li><a href="contact.html">Institutional Contact</a></li>
+            <li><a href="events.html">Events & Seminars</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 Harish-Chandra Research Centre, CSJMU Kanpur × IIT Kanpur.</div>
+        <div class="footer-utility">
+          <a href="contact.html">Privacy</a>
+          <span>·</span>
+          <a href="contact.html">Accessibility</a>
+          <span>·</span>
+          <a href="admin/login.html" class="footer-admin-link">Admin Portal</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/exhibition.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

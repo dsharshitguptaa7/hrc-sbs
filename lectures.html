@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Annual Harish-Chandra Lecture Series Archive. Year-wise interactive catalogue of distinguished mathematical lectures, keynote orators, and academic colloquia.">
+  <title>Annual Harish-Chandra Lecture Series | Lecture Archive</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="header-topbar">
+    <div class="container">
+      <div class="header-topbar-collab">
+        <span>School of Basic Sciences</span>
+        <span class="dot">·</span>
+        <span>CSJMU Kanpur</span>
+        <span class="dot">×</span>
+        <span class="full-text">In collaboration with IIT Kanpur</span>
+      </div>
+      <div>
+        <span>The Lecture Archive · Year-wise System</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand-lockup">
+        <div class="brand-logos">
+          <img src="assets/logo/hrc-logo.png" alt="Harish-Chandra Research Centre Logo" class="brand-logo-img hrc-logo">
+          <div class="brand-separator"></div>
+          <img src="assets/logo/csjmu.png" alt="CSJMU Logo" class="brand-logo-img">
+          <img src="assets/logo/iitk.png" alt="IIT Kanpur Logo" class="brand-logo-img">
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Harish-Chandra Research Centre</span>
+          <span class="brand-subtitle">School of Basic Sciences</span>
+          <span class="brand-institution">CSJMU · Kanpur</span>
+        </div>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="harishchandra.html" class="nav-link">Dr. Harishchandra</a></li>
+          <li><a href="research.html" class="nav-link">Research</a></li>
+          <li><a href="lectures.html" class="nav-link active">Lectures</a></li>
+          <li><a href="people.html" class="nav-link">People</a></li>
+          <li><a href="exhibition/index.html" class="nav-link nav-highlight">Digital Legacy</a></li>
+          <li><a href="events.html" class="nav-link">Events</a></li>
+          <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Open Navigation Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+    <div class="mobile-nav-panel">
+      <div class="mobile-nav-header">
+        <span class="drawer-title">Navigation Menu</span>
+        <button class="mobile-nav-close" aria-label="Close Navigation Menu">&times;</button>
+      </div>
+      <ul class="mobile-nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About the Centre</a></li>
+        <li><a href="harishchandra.html">Dr. Harishchandra</a></li>
+        <li><a href="research.html">Research & Taxonomy</a></li>
+        <li><a href="lectures.html" class="nav-highlight">Lecture Archive</a></li>
+        <li><a href="people.html">Academic People</a></li>
+        <li><a href="exhibition/index.html">Digital Legacy 2026</a></li>
+        <li><a href="events.html">Events & Seminars</a></li>
+        <li><a href="gallery.html">Photo Archive</a></li>
+        <li><a href="contact.html">Institutional Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Hero Banner -->
+  <section class="section section-alt" style="padding: 3.8rem 0;">
+    <div class="container">
+      <div class="chapter-badge">INSTITUTIONAL COLLOQUIA</div>
+      <span class="eyebrow">ANNUAL COMMEMORATION</span>
+      <h1 style="margin-top: 0.4rem; margin-bottom: 0.8rem;">The Harish-Chandra Lecture Archive</h1>
+      <p style="font-size: 1.15rem; color: var(--slate); max-width: 800px;">
+        “Ideas, across the years.” A multi-year repository of memorial lectures, keynote addresses, and scientific proceedings convened annually at CSJMU Kanpur in partnership with IIT Kanpur.
+      </p>
+    </div>
+  </section>
+
+  <!-- Interactive Lecture System Area -->
+  <section class="section">
+    <div class="container">
+      
+      <div class="lecture-system-wrapper">
+        <!-- Interactive Year Tabs -->
+        <div class="lecture-year-nav" id="lecture-year-nav">
+          <!-- Dynamically populated by js/lectures.js -->
+        </div>
+
+        <!-- Render Target for Selected Year -->
+        <div id="lecture-display-area">
+          <!-- Populated by js/lectures.js -->
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section: Submission / Nomination of Future Orators -->
+  <section class="section section-alt">
+    <div class="container">
+      <div style="max-width: 760px; margin: 0 auto; text-align: center;" data-reveal>
+        <span class="eyebrow no-line">PROPOSAL & ADVISORY</span>
+        <h2 style="margin-bottom: 1rem;">Nominating Centenary & Future Orators</h2>
+        <p style="font-size: 1.02rem; line-height: 1.7; color: var(--charcoal-light); margin-bottom: 1.8rem;">
+          The Annual Lecture Academic Committee warmly welcomes proposals from department heads and researchers for distinguished international mathematicians working in representation theory, mathematical physics, and harmonic analysis.
+        </p>
+        <a href="contact.html" class="btn btn-primary btn-arrow">
+          Contact Advisory Committee
+          <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <div class="footer-brand">
+          <h3>Harish-Chandra Research Centre</h3>
+          <p>
+            School of Basic Sciences<br>
+            CSJMU, Kanpur · In collaboration with IIT Kanpur
+          </p>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Navigation</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About the Centre</a></li>
+            <li><a href="lectures.html">Lecture Archive</a></li>
+            <li><a href="people.html">Academic People</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Digital Legacy</div>
+          <ul class="footer-links">
+            <li><a href="exhibition/index.html">Exhibition Pavilion</a></li>
+            <li><a href="exhibition/archive.html">03 · Digital Archive</a></li>
+            <li><a href="exhibition/harishchandra-day.html">10 · Harishchandra Day 2026</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Contact</div>
+          <ul class="footer-links">
+            <li><a href="contact.html">Institutional Contact</a></li>
+            <li><a href="events.html">Events & Seminars</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 Harish-Chandra Research Centre, CSJMU Kanpur × IIT Kanpur.</div>
+        <div class="footer-utility">
+          <a href="contact.html">Privacy</a>
+          <span>·</span>
+          <a href="contact.html">Accessibility</a>
+          <span>·</span>
+          <a href="admin/login.html" class="footer-admin-link">Admin Portal</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/lectures.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

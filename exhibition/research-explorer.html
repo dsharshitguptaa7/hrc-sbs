@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05 — Research Explorer | Digital Legacy 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+  <div class="header-topbar">
+    <div class="container">
+      <div class="header-topbar-collab">
+        <span>School of Basic Sciences</span><span class="dot">·</span><span>CSJMU Kanpur × IIT Kanpur</span>
+      </div>
+      <div><span>Track 05 of 12 · Digital Legacy 2026</span></div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="../index.html" class="brand-lockup">
+        <div class="brand-logos">
+          <img src="../assets/logo/hrc-logo.png" alt="HRC Logo" class="brand-logo-img hrc-logo">
+          <div class="brand-separator"></div>
+          <img src="../assets/logo/csjmu.png" alt="CSJMU" class="brand-logo-img">
+          <img src="../assets/logo/iitk.png" alt="IITK" class="brand-logo-img">
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Harish-Chandra Research Centre</span>
+          <span class="brand-subtitle">School of Basic Sciences · CSJMU</span>
+        </div>
+      </a>
+      <nav><ul class="nav-menu">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="index.html" class="nav-link nav-highlight active">Exhibition Hub</a></li>
+        <li><a href="quiz.html" class="nav-link">Quiz</a></li>
+        <li><a href="legacy-map.html" class="nav-link">Legacy Map</a></li>
+      </ul></nav>
+      <button class="nav-toggle" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+    </div>
+  </header>
+
+  <section class="section section-alt" style="padding: 3.5rem 0;">
+    <div class="container">
+      <div class="chapter-badge">EXHIBITION TRACK 05 / 12</div>
+      <span class="eyebrow">MATHEMATICAL TAXONOMY</span>
+      <h1 style="margin: 0.3rem 0 0.8rem;">Research Explorer</h1>
+      <p style="font-size: 1.15rem; color: var(--slate); max-width: 800px;">
+        Interactive cataloguing of Harish-Chandra's work across Lie algebras, harmonic analysis, and representation theory.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div style="margin-bottom: 2rem;">
+        <input type="text" id="research-search" placeholder="Filter mathematical themes (e.g., Lie, Plancherel, Characters, Dirac)..." oninput="filterResearchCards()" style="width: 100%; max-width: 500px; padding: 0.8rem 1.2rem; border: 1px solid var(--border-light); border-radius: var(--radius-sm); font-size: 0.95rem; font-family: inherit;">
+      </div>
+
+      <div class="pillars-grid" id="research-cards" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+        <div class="pillar-card research-item" data-keywords="lie groups representations infinite-dimensional">
+          <span class="eyebrow">CATEGORY A</span>
+          <h4>Representations of Semisimple Lie Groups</h4>
+          <p>Classification of irreducible representations on Banach and Hilbert spaces; the subquotient theorem; character formulas.</p>
+        </div>
+
+        <div class="pillar-card research-item" data-keywords="harmonic analysis plancherel fourier spherical">
+          <span class="eyebrow">CATEGORY B</span>
+          <h4>Non-Commutative Harmonic Analysis</h4>
+          <p>The explicit Plancherel formula for real reductive groups; spherical transform; Harish-Chandra Schwartz spaces.</p>
+        </div>
+
+        <div class="pillar-card research-item" data-keywords="characters distributions regular differential">
+          <span class="eyebrow">CATEGORY C</span>
+          <h4>Invariant Eigendistributions</h4>
+          <p>Harish-Chandra's regularity theorem for characters; proving that distributions satisfying Laplace-type systems are locally \(L^1\) functions.</p>
+        </div>
+
+        <div class="pillar-card research-item" data-keywords="automorphic forms langlands eisenstein cusp">
+          <span class="eyebrow">CATEGORY D</span>
+          <h4>Automorphic Forms & Eisenstein Series</h4>
+          <p>General theory of Eisenstein series and cusp forms on reductive groups, setting the foundational machinery for modern Langlands theory.</p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 3rem;">
+        <a href="quiz.html" class="btn btn-gold btn-arrow">Next Track: 06 · Dr. Harishchandra Quiz →</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; font-size: 0.8rem; color: rgba(255,255,255,0.6);">
+      <div>Harish-Chandra Research Centre &middot; School of Basic Sciences, CSJMU Kanpur &times; IIT Kanpur.</div>
+      <div class="footer-utility">
+        <a href="../contact.html">Privacy</a>
+        <span>&middot;</span>
+        <a href="../contact.html">Accessibility</a>
+        <span>&middot;</span>
+        <a href="../admin/login.html" class="footer-admin-link">Admin Portal</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function filterResearchCards() {
+      const q = document.getElementById('research-search').value.toLowerCase();
+      const items = document.querySelectorAll('.research-item');
+      items.forEach(it => {
+        const text = it.innerText.toLowerCase() + " " + it.getAttribute('data-keywords');
+        it.style.display = text.includes(q) ? 'block' : 'none';
+      });
+    }
+  </script>
+  <script src="../js/navigation.js"></script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal | Harish-Chandra Research Centre</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-body" style="justify-content: center; align-items: center; background: radial-gradient(circle at top center, #102A45 0%, #0B1F33 100%);">
+
+  <div style="width: 100%; max-width: 440px; padding: 2rem 1.5rem;">
+    <div style="background: #FFFFFF; border-radius: 8px; padding: 2.5rem 2.2rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45); border: 1px solid rgba(201, 162, 39, 0.35); position: relative; overflow: hidden;">
+      
+      <!-- Subtle top gold accent line -->
+      <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #1E4E79, #C9A227, #1E4E79);"></div>
+
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <img src="../assets/logo/hrc-logo.png" alt="Harish-Chandra Research Centre Seal" style="height: 56px; margin: 0 auto 0.8rem; display: block;">
+        <h1 style="font-family: 'Playfair Display', Georgia, serif; font-size: 1.35rem; color: #0B1F33; margin: 0 0 0.35rem; font-weight: 700; letter-spacing: -0.01em;">
+          Harish-Chandra Research Centre
+        </h1>
+        <div style="font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: #C9A227; font-weight: 600;">
+          Administrative Control Portal
+        </div>
+        <div style="font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 0.88rem; color: #64748B; margin-top: 0.25rem;">
+          School of Basic Sciences · CSJMU Kanpur × IIT Kanpur
+        </div>
+      </div>
+
+      <div id="login-error-alert" role="alert" style="display: none; background: #FEF2F2; border-left: 4px solid #DC2626; padding: 0.8rem 1rem; color: #991B1B; font-size: 0.84rem; margin-bottom: 1.4rem; border-radius: 4px; line-height: 1.45;"></div>
+      <div id="login-success-alert" role="status" style="display: none; background: #F0FDF4; border-left: 4px solid #16A34A; padding: 0.8rem 1rem; color: #166534; font-size: 0.84rem; margin-bottom: 1.4rem; border-radius: 4px; line-height: 1.45;"></div>
+
+      <!-- Password Recovery Form (Shown when PASSWORD_RECOVERY event is detected) -->
+      <form id="admin-recovery-form" style="display: none;" novalidate>
+        <div style="font-size: 0.86rem; color: #0B1F33; font-weight: 600; margin-bottom: 0.5rem;">
+          Reset Administrator Password
+        </div>
+        <p style="font-size: 0.78rem; color: #64748B; margin-bottom: 1.2rem; line-height: 1.45;">
+          Your recovery token has been validated. Please enter your new password below.
+        </p>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="recovery-new-password">New Password</label>
+          <input 
+            type="password" 
+            id="recovery-new-password" 
+            class="admin-form-control" 
+            required 
+            placeholder="At least 8 characters" 
+            autocomplete="new-password">
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="recovery-confirm-password">Confirm New Password</label>
+          <input 
+            type="password" 
+            id="recovery-confirm-password" 
+            class="admin-form-control" 
+            required 
+            placeholder="Repeat new password" 
+            autocomplete="new-password">
+        </div>
+
+        <button type="submit" id="recovery-submit-btn" class="admin-btn admin-btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem 1rem; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.04em;">
+          Update Password & Sign In
+        </button>
+      </form>
+
+      <!-- Standard Sign In Form -->
+      <form id="admin-login-form" novalidate>
+        <div class="admin-form-group">
+          <label class="admin-form-label" for="login-email">Administrator Email</label>
+          <input 
+            type="email" 
+            id="login-email" 
+            name="email"
+            class="admin-form-control" 
+            required 
+            placeholder="admin@csjmu.ac.in" 
+            autocomplete="username"
+            autocapitalize="none"
+            spellcheck="false">
+        </div>
+
+        <div class="admin-form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+            <label class="admin-form-label" for="login-password" style="margin-bottom: 0;">Password</label>
+          </div>
+          <div class="admin-input-group">
+            <input 
+              type="password" 
+              id="login-password" 
+              name="password"
+              class="admin-form-control" 
+              required 
+              placeholder="••••••••••••" 
+              autocomplete="current-password">
+            <button 
+              type="button" 
+              id="password-toggle-btn" 
+              class="admin-input-addon-btn" 
+              aria-label="Show password" 
+              title="Show password">
+              <!-- Eye open icon (default) -->
+              <svg id="eye-icon-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <!-- Eye closed icon (hidden) -->
+              <svg id="eye-icon-hide" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem; font-size: 0.76rem; color: #64748B; line-height: 1.45;">
+          Access restricted to authorized research administrators and editors. Protected by Supabase Row Level Security.
+        </div>
+
+        <button type="submit" id="login-submit-btn" class="admin-btn admin-btn-primary" style="width: 100%; justify-content: center; padding: 0.8rem 1rem; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.04em;">
+          Sign In to Admin Portal
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.8rem; border-top: 1px solid #E2E8F0; padding-top: 1.2rem;">
+        <a href="../index.html" style="font-size: 0.82rem; color: #1E4E79; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.4rem; transition: color 0.2s;">
+          ← Back to Website
+        </a>
+      </div>
+    </div>
+
+    <!-- Security notice below card -->
+    <div style="text-align: center; margin-top: 1.2rem; font-size: 0.72rem; color: rgba(255, 255, 255, 0.45); letter-spacing: 0.05em;">
+      HARISH-CHANDRA RESEARCH CENTRE · SECURE ACCESS
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/admin/auth.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('admin-login-form');
+      const recoveryForm = document.getElementById('admin-recovery-form');
+      const errBox = document.getElementById('login-error-alert');
+      const successBox = document.getElementById('login-success-alert');
+      const btn = document.getElementById('login-submit-btn');
+      const recoveryBtn = document.getElementById('recovery-submit-btn');
+      const emailInput = document.getElementById('login-email');
+      const passwordInput = document.getElementById('login-password');
+      const toggleBtn = document.getElementById('password-toggle-btn');
+      const eyeShow = document.getElementById('eye-icon-show');
+      const eyeHide = document.getElementById('eye-icon-hide');
+
+      const sb = getSupabase();
+
+      // Check URL parameters for errors (e.g. redirected with ?error=unauthorized)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('error') === 'unauthorized') {
+        errBox.textContent = 'You are authenticated, but you do not have administrative access. Please log in with an authorized account.';
+        errBox.style.display = 'block';
+      }
+
+      // Check if URL hash contains recovery token or type=recovery
+      const hash = window.location.hash || '';
+      const isRecoveryFlow = hash.includes('type=recovery') || urlParams.get('type') === 'recovery';
+      if (isRecoveryFlow) {
+        form.style.display = 'none';
+        recoveryForm.style.display = 'block';
+      }
+
+      // Listen for Supabase Auth state changes (specifically PASSWORD_RECOVERY)
+      if (sb) {
+        sb.auth.onAuthStateChange(async (event, session) => {
+          console.log('[HRC Auth] Auth state change event:', event);
+          if (event === 'PASSWORD_RECOVERY') {
+            form.style.display = 'none';
+            recoveryForm.style.display = 'block';
+            errBox.style.display = 'none';
+            successBox.textContent = 'Recovery session active. Enter your new password below.';
+            successBox.style.display = 'block';
+          }
+        });
+      }
+
+      // Check if already authenticated with valid admin/editor role (only if not in recovery flow)
+      if (!isRecoveryFlow) {
+        HRC_AUTH.init(false).then(() => {
+          if (HRC_AUTH.currentUser && HRC_AUTH.currentProfile) {
+            window.location.href = 'dashboard.html';
+          }
+        });
+      }
+
+      // Password visibility toggle
+      toggleBtn.addEventListener('click', () => {
+        const isPassword = passwordInput.getAttribute('type') === 'password';
+        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+        eyeShow.style.display = isPassword ? 'none' : 'block';
+        eyeHide.style.display = isPassword ? 'block' : 'none';
+        toggleBtn.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+        toggleBtn.setAttribute('title', isPassword ? 'Hide password' : 'Show password');
+      });
+
+      // Password Recovery form submission
+      recoveryForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errBox.style.display = 'none';
+        successBox.style.display = 'none';
+
+        const newPass = document.getElementById('recovery-new-password').value;
+        const confirmPass = document.getElementById('recovery-confirm-password').value;
+
+        if (!newPass || newPass.length < 6) {
+          errBox.textContent = 'Password must be at least 6 characters long.';
+          errBox.style.display = 'block';
+          return;
+        }
+
+        if (newPass !== confirmPass) {
+          errBox.textContent = 'New passwords do not match. Please re-enter.';
+          errBox.style.display = 'block';
+          return;
+        }
+
+        if (!sb) {
+          errBox.textContent = 'Authentication service is unavailable.';
+          errBox.style.display = 'block';
+          return;
+        }
+
+        recoveryBtn.disabled = true;
+        recoveryBtn.textContent = 'Updating Password...';
+
+        try {
+          const { data, error } = await sb.auth.updateUser({ password: newPass });
+          if (error) throw error;
+
+          successBox.textContent = 'Password updated successfully! You can now access the admin portal.';
+          successBox.style.display = 'block';
+          recoveryForm.style.display = 'none';
+          form.style.display = 'block';
+          passwordInput.value = '';
+
+          // Check if session is already authorized to jump to dashboard
+          const authed = await HRC_AUTH.init(false);
+          if (authed && HRC_AUTH.currentUser && HRC_AUTH.currentProfile) {
+            setTimeout(() => {
+              window.location.href = 'dashboard.html';
+            }, 1200);
+          }
+        } catch (err) {
+          console.error('[HRC Auth] Password update error:', err);
+          errBox.textContent = err.message || 'Failed to update password. Please request a new recovery link.';
+          errBox.style.display = 'block';
+          recoveryBtn.disabled = false;
+          recoveryBtn.textContent = 'Update Password & Sign In';
+        }
+      });
+
+      // Standard Login form submission handler
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errBox.style.display = 'none';
+        successBox.style.display = 'none';
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        if (!email || !password) {
+          errBox.textContent = 'Please provide both your administrator email and password.';
+          errBox.style.display = 'block';
+          return;
+        }
+
+        btn.disabled = true;
+        const originalText = btn.textContent;
+        btn.textContent = 'Signing in...';
+
+        try {
+          await HRC_AUTH.login(email, password);
+          window.location.href = 'dashboard.html';
+        } catch (err) {
+          errBox.textContent = err.message || 'Invalid email or password.';
+          errBox.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
