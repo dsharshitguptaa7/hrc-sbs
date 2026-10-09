@@ -33,8 +33,12 @@ function initPeopleCollapsibleGroups() {
   });
 }
 
-// Event filter logic for events.html
+// Event filter logic for events.html (if not managed by js/events.js)
 function initEventFiltering() {
+  if (typeof loadPublicEvents === 'function') {
+    // events.html dynamic loader handles filtering natively
+    return;
+  }
   const filterBtns = document.querySelectorAll('.filter-btn');
   const eventCards = document.querySelectorAll('.event-card');
 
