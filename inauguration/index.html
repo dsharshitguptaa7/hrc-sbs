@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Official Inauguration Ceremony of the Harish-Chandra Research Centre, School of Basic Sciences, CSJMU Kanpur in collaboration with IIT Kanpur.">
+  <meta name="theme-color" content="#06111D">
+  <title>Inauguration Ceremony | Harish-Chandra Research Centre</title>
+
+  <!-- Official Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/inauguration.css">
+</head>
+<body class="stage-view" data-phase="anticipation">
+
+  <!-- Accessible Skip Navigation -->
+  <a href="https://hrc-sbs.vercel.app/" class="skip-link">Skip Ceremony to Main Website</a>
+
+  <!-- Top Auditorium Header / Ceremony Status Bar -->
+  <header class="auditorium-header" aria-label="Auditorium Controls">
+    <div class="header-seal">
+      <span class="seal-lamp"></span>
+      <span class="seal-title">School of Basic Sciences &bull; CSJMU Kanpur &times; IIT Kanpur</span>
+    </div>
+
+    <div class="header-actions">
+      <!-- Sound Control -->
+      <button type="button" class="btn-topbar" id="btnAudioToggle" aria-label="Toggle Ceremony Audio" aria-pressed="false">
+        <svg class="icon-speaker-on" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <svg class="icon-speaker-off" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+        <span class="btn-text" id="audioStatusText">Sound: Off</span>
+      </button>
+
+      <!-- Fast-Forward / Skip Button -->
+      <button type="button" class="btn-topbar" id="btnFastForward" aria-label="Skip to Final Welcome">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="5 4 15 12 5 20 5 4"></polygon>
+          <line x1="19" y1="5" x2="19" y2="19"></line>
+        </svg>
+        <span class="btn-text">Skip</span>
+      </button>
+
+      <!-- Direct Official Portal Link -->
+      <a href="https://hrc-sbs.vercel.app/" class="direct-portal-link" target="_blank" rel="noopener">
+        <span>hrc-sbs.vercel.app &nearr;</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- The Auditorium Stage Scene Viewport -->
+  <main class="auditorium-stage" id="auditoriumStage" role="region" aria-label="Auditorium Inauguration Stage">
+
+    <!-- Overhead Theatrical Spotlights -->
+    <div class="theatrical-lights" aria-hidden="true">
+      <div class="spotlight beam-left"></div>
+      <div class="spotlight beam-center"></div>
+      <div class="spotlight beam-right"></div>
+      <div class="stage-warmth-glow"></div>
+    </div>
+
+    <!-- Restrained Canvas for Atmospheric Dust & Cut Flakes -->
+    <canvas id="ceremonyCanvas" class="ceremony-canvas" aria-hidden="true"></canvas>
+
+    <!-- Stage Architectural Proscenium Framing -->
+    <div class="proscenium-frame" aria-hidden="true">
+      <div class="proscenium-header">
+        <div class="proscenium-brass-plaque">
+          <span>HARISH-CHANDRA RESEARCH CENTRE &bull; AUDITORIUM</span>
+        </div>
+      </div>
+      <div class="proscenium-pillar pillar-left"></div>
+      <div class="proscenium-pillar pillar-right"></div>
+    </div>
+
+    <!-- Real Dark Hardwood Stage Floor with Reflections -->
+    <div class="stage-hardwood-floor" aria-hidden="true">
+      <div class="wood-plank-surface"></div>
+      <div class="wood-spotlight-pool"></div>
+      <div class="stage-apron-shadow"></div>
+    </div>
+
+    <!-- Stage Rear Wall / Academic Backdrop -->
+    <div class="stage-rear-backdrop" id="stageBackdrop">
+      <div class="backdrop-acoustic-panel">
+        <!-- Physical Academic Banner / Seal -->
+        <div class="institutional-backdrop-board">
+          <!-- Authentic Logos Lockup -->
+          <div class="backdrop-logos-row">
+            <div class="inst-logo-frame logo-hrc-frame">
+              <img src="../assets/logo/hrc-logo.png" data-fallback="assets/logo/hrc-logo.png" onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;delete this.dataset.fallback;}" alt="Harish-Chandra Research Centre Seal" class="inst-logo-img">
+            </div>
+            <div class="backdrop-logos-separator" aria-hidden="true"></div>
+            <div class="inst-logo-frame logo-csjmu-frame">
+              <img src="../assets/logo/csjmu.png" data-fallback="assets/logo/csjmu.png" onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;delete this.dataset.fallback;}" alt="Chhatrapati Shahu Ji Maharaj University, Kanpur" class="inst-logo-img">
+            </div>
+            <div class="inst-logo-frame logo-iitk-frame">
+              <img src="../assets/logo/iitk.png" data-fallback="assets/logo/iitk.png" onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;delete this.dataset.fallback;}" alt="Indian Institute of Technology Kanpur" class="inst-logo-img">
+            </div>
+          </div>
+
+          <!-- Official Institutional Hierarchy -->
+          <div class="backdrop-title-group">
+            <p class="backdrop-school-meta">SCHOOL OF BASIC SCIENCES</p>
+            <h1 class="backdrop-centre-title">
+              <span class="title-primary">HARISH-CHANDRA</span>
+              <span class="title-secondary">Research Centre</span>
+            </h1>
+            <p class="backdrop-univ-meta">CHHATRAPATI SHAHU JI MAHARAJ UNIVERSITY, KANPUR</p>
+            <div class="backdrop-collab-line">
+              <span class="line-bar"></span>
+              <span class="line-text">IN COLLABORATION WITH</span>
+              <span class="line-bar"></span>
+            </div>
+            <p class="backdrop-partner-meta">INDIAN INSTITUTE OF TECHNOLOGY KANPUR</p>
+            <p class="backdrop-motto">&ldquo;A space for ideas to grow.&rdquo;</p>
+          </div>
+
+          <!-- Phase 4: Grand Reveal / Welcome Content (Hidden until ribbon is cut) -->
+          <div class="welcome-declaration-card" id="welcomeDeclarationCard" aria-hidden="true">
+            <div class="declaration-ribbon-tag">
+              <span class="tag-star">&starf;</span>
+              <span class="tag-title">A NEW CHAPTER BEGINS</span>
+              <span class="tag-star">&starf;</span>
+            </div>
+
+            <h2 class="declaration-welcome-heading">WELCOME TO THE HARISH-CHANDRA RESEARCH CENTRE</h2>
+
+            <p class="declaration-supporting-text">
+              A centre for research, dialogue, education, and academic community.
+            </p>
+
+            <div class="declaration-button-row">
+              <a href="https://hrc-sbs.vercel.app/" class="btn-enter-website" id="btnEnterWebsite" target="_blank" rel="noopener">
+                <span>ENTER THE CENTRE &rarr;</span>
+              </a>
+              <button type="button" class="btn-replay-experience" id="btnReplayExperience">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M1 4v6h6M23 20v-6h-6"/>
+                  <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                </svg>
+                <span>Replay Ceremony</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Ceremonial Horizontal Ribbon & Brass Stanchions Rig -->
+    <div class="ceremonial-ribbon-installation" id="ribbonInstallation" aria-label="Ceremonial Ribbon and Stanchions">
+
+      <!-- Left Brass Ribbon Stanchion Post -->
+      <div class="brass-stanchion stanchion-left" aria-hidden="true">
+        <div class="stanchion-finial-ball"></div>
+        <div class="stanchion-collar"></div>
+        <div class="stanchion-shaft"></div>
+        <div class="stanchion-weighted-base"></div>
+        <div class="stanchion-floor-shadow"></div>
+      </div>
+
+      <!-- Horizontal Ceremonial Ribbon Assembly -->
+      <div class="ribbon-horizontal-span" id="ribbonSpan">
+        <!-- Left Half of Ribbon (stretches from left post to center) -->
+        <div class="ribbon-half ribbon-half-left" id="ribbonHalfLeft">
+          <div class="satin-ribbon-strap">
+            <div class="satin-sheen-highlight"></div>
+            <div class="ribbon-gold-piping piping-top"></div>
+            <div class="ribbon-gold-piping piping-bottom"></div>
+          </div>
+          <!-- Hanging loose tail after cut -->
+          <div class="ribbon-hanging-tail tail-left"></div>
+        </div>
+
+        <!-- Center Knot / Ceremonial Bow Assembly -->
+        <div class="ribbon-center-knot" id="ribbonCenterKnot">
+          <div class="rosette-satin-folds"></div>
+          <div class="rosette-gold-clasp">
+            <svg viewBox="0 0 28 28" width="22" height="22" fill="none" aria-hidden="true">
+              <circle cx="14" cy="14" r="11" fill="#D4AF37" stroke="#FFEAA7" stroke-width="1.5"/>
+              <circle cx="14" cy="14" r="8" fill="#8C6D14"/>
+              <polygon points="14,6 16,11 22,11 17,15 19,21 14,17 9,21 11,15 6,11 12,11" fill="#FFEAA7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Right Half of Ribbon (stretches from center to right post) -->
+        <div class="ribbon-half ribbon-half-right" id="ribbonHalfRight">
+          <div class="satin-ribbon-strap">
+            <div class="satin-sheen-highlight"></div>
+            <div class="ribbon-gold-piping piping-top"></div>
+            <div class="ribbon-gold-piping piping-bottom"></div>
+          </div>
+          <!-- Hanging loose tail after cut -->
+          <div class="ribbon-hanging-tail tail-right"></div>
+        </div>
+
+        <!-- Cut Flash Burst -->
+        <div class="ribbon-snip-spark" id="ribbonSnipSpark" aria-hidden="true"></div>
+      </div>
+
+      <!-- Golden Ceremonial Scissors (Positioned at exact center of ribbon) -->
+      <div class="golden-ceremonial-scissors" id="ceremonialScissors" aria-label="Golden Ceremonial Scissors" role="img">
+        <svg class="scissors-vector" viewBox="0 0 100 100" width="90" height="90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="bladeGradTop" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FFFDF0"/>
+              <stop offset="30%" stop-color="#E5C158"/>
+              <stop offset="70%" stop-color="#C9A227"/>
+              <stop offset="100%" stop-color="#7A5D10"/>
+            </linearGradient>
+            <linearGradient id="handleGradTop" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#FFE8A3"/>
+              <stop offset="40%" stop-color="#D4AF37"/>
+              <stop offset="85%" stop-color="#8C6A15"/>
+              <stop offset="100%" stop-color="#4A3403"/>
+            </linearGradient>
+            <filter id="metalShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity="0.6"/>
+            </filter>
+          </defs>
+
+          <!-- Upper Blade & Handle -->
+          <g class="blade-component blade-upper" id="bladeUpper">
+            <!-- Cutting Edge -->
+            <path d="M50 50 L92 25 C88 28 68 40 50 50 Z" fill="url(#bladeGradTop)" filter="url(#metalShadow)"/>
+            <path d="M50 50 L92 25 C90 26 78 35 50 48 Z" fill="#FFF" opacity="0.7"/>
+            <!-- Pivot Arm & Finger Loop -->
+            <path d="M50 50 L30 65 C25 69 17 70 11 65 C5 60 5 51 11 46 C17 41 26 44 32 50 Z" fill="url(#handleGradTop)" filter="url(#metalShadow)"/>
+            <ellipse cx="12" cy="56" rx="5" ry="6" fill="#0B1F33"/>
+          </g>
+
+          <!-- Lower Blade & Handle -->
+          <g class="blade-component blade-lower" id="bladeLower">
+            <!-- Cutting Edge -->
+            <path d="M50 50 L92 28 C88 26 70 40 50 50 Z" fill="url(#bladeGradTop)" filter="url(#metalShadow)"/>
+            <!-- Pivot Arm & Finger Loop -->
+            <path d="M50 50 L35 35 C40 30 42 22 37 15 C32 9 24 9 19 15 C14 22 17 30 24 35 Z" fill="url(#handleGradTop)" filter="url(#metalShadow)"/>
+            <ellipse cx="27" cy="21" rx="5" ry="6" fill="#0B1F33"/>
+          </g>
+
+          <!-- Golden Pivot Screw -->
+          <circle cx="50" cy="50" r="4.2" fill="url(#handleGradTop)" stroke="#FFF2B2" stroke-width="1"/>
+          <circle cx="50" cy="50" r="1.8" fill="#1E4E79"/>
+        </svg>
+      </div>
+
+      <!-- Right Brass Ribbon Stanchion Post -->
+      <div class="brass-stanchion stanchion-right" aria-hidden="true">
+        <div class="stanchion-finial-ball"></div>
+        <div class="stanchion-collar"></div>
+        <div class="stanchion-shaft"></div>
+        <div class="stanchion-weighted-base"></div>
+        <div class="stanchion-floor-shadow"></div>
+      </div>
+    </div>
+
+    <!-- Authentic Velvet Stage Curtains -->
+    <div class="stage-velvet-curtains" id="stageCurtains" aria-hidden="true">
+      <!-- Top Valance / Pelmet Drapery -->
+      <div class="curtains-top-pelmet">
+        <div class="pelmet-drape-swag swag-l"></div>
+        <div class="pelmet-drape-swag swag-c"></div>
+        <div class="pelmet-drape-swag swag-r"></div>
+        <div class="pelmet-bullion-fringe"></div>
+      </div>
+
+      <!-- Left Velvet Curtain Wing (Heavy vertical drapery folds) -->
+      <div class="curtain-side-wing wing-left" id="curtainLeft">
+        <div class="velvet-folds-container">
+          <div class="velvet-fold fold-1"></div>
+          <div class="velvet-fold fold-2"></div>
+          <div class="velvet-fold fold-3"></div>
+          <div class="velvet-fold fold-4"></div>
+          <div class="velvet-fold fold-5"></div>
+          <div class="velvet-fold fold-6"></div>
+          <div class="velvet-fold fold-7"></div>
+          <div class="velvet-fold fold-8"></div>
+        </div>
+        <div class="curtain-inner-shadow"></div>
+        <div class="curtain-gold-trim-edge"></div>
+        <div class="curtain-bottom-fringe"></div>
+        <div class="curtain-gathered-sash sash-left"></div>
+      </div>
+
+      <!-- Right Velvet Curtain Wing (Heavy vertical drapery folds) -->
+      <div class="curtain-side-wing wing-right" id="curtainRight">
+        <div class="velvet-folds-container">
+          <div class="velvet-fold fold-1"></div>
+          <div class="velvet-fold fold-2"></div>
+          <div class="velvet-fold fold-3"></div>
+          <div class="velvet-fold fold-4"></div>
+          <div class="velvet-fold fold-5"></div>
+          <div class="velvet-fold fold-6"></div>
+          <div class="velvet-fold fold-7"></div>
+          <div class="velvet-fold fold-8"></div>
+        </div>
+        <div class="curtain-inner-shadow"></div>
+        <div class="curtain-gold-trim-edge"></div>
+        <div class="curtain-bottom-fringe"></div>
+        <div class="curtain-gathered-sash sash-right"></div>
+      </div>
+
+      <!-- Center Light Slit (Dim Anticipation Light in Phase 1) -->
+      <div class="curtain-center-slit" id="curtainCenterSlit">
+        <div class="slit-light-beam"></div>
+      </div>
+    </div>
+
+    <!-- Interactive Flow Control Layer (Phased UI Prompts) -->
+    <div class="stage-interactive-overlay">
+
+      <!-- Phase 1: Anticipation Prompt Card -->
+      <div class="ceremony-prompt-card prompt-anticipation" id="promptAnticipation">
+        <p class="prompt-eyebrow">CHHATRAPATI SHAHU JI MAHARAJ UNIVERSITY, KANPUR</p>
+        <h2 class="prompt-title">HARISH-CHANDRA RESEARCH CENTRE</h2>
+        <p class="prompt-subtitle">School of Basic Sciences &bull; In Collaboration with IIT Kanpur</p>
+        <button type="button" class="btn-ceremonial-action btn-begin-inauguration" id="btnBeginInauguration" aria-label="Begin Inauguration Ceremony">
+          <span class="btn-primary-text">BEGIN INAUGURATION &rarr;</span>
+          <span class="btn-sub-hint">Enter the auditorium &amp; reveal the stage</span>
+        </button>
+      </div>
+
+      <!-- Phase 3: Ceremonial Ribbon Cutting Prompt -->
+      <div class="ceremony-prompt-card prompt-ribbon-cut" id="promptRibbonCut">
+        <p class="prompt-eyebrow">CEREMONIAL INAUGURATION</p>
+        <p class="prompt-instruction">Begin the ceremonial ribbon cutting</p>
+        <button type="button" class="btn-ceremonial-action btn-cut-ribbon" id="btnCutRibbon" aria-label="Cut the Ceremonial Ribbon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="6" cy="6" r="3"></circle>
+            <circle cx="6" cy="18" r="3"></circle>
+            <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+            <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+            <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+          </svg>
+          <span class="btn-primary-text">CUT THE RIBBON</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Non-Script Fallback -->
+  <noscript>
+    <div style="position:fixed;inset:0;background:#06111D;color:#FFF;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;z-index:99999;">
+      <h1 style="color:#D4AF37;margin-bottom:1rem;font-family:serif;">HARISH-CHANDRA RESEARCH CENTRE</h1>
+      <p style="margin-bottom:2rem;max-width:550px;">School of Basic Sciences, CSJMU Kanpur in collaboration with IIT Kanpur.<br>&ldquo;A space for ideas to grow.&rdquo;</p>
+      <a href="https://hrc-sbs.vercel.app/" style="background:#D4AF37;color:#06111D;padding:1rem 2rem;font-weight:bold;text-decoration:none;border-radius:4px;">ENTER THE CENTRE &rarr;</a>
+    </div>
+  </noscript>
+
+  <script src="js/inauguration.js"></script>
+</body>
+</html>

@@ -284,13 +284,43 @@
                   <div class="student-profile-program">M.Sc. Mathematics</div>
                   <div class="student-profile-dept">Department of Mathematics</div>
                   <div class="student-profile-inst">School of Basic Sciences, CSJMU</div>
-                  <div class="student-profile-tenure">2025–2027</div>
+                  <div class="student-profile-tenure">2026–2027</div>
                 </div>
                 <div class="student-role-block">
                   <hr class="student-profile-divider">
                   <div class="student-role-label">Credit & Initiative Role</div>
                   <p class="student-role-text">Archival Research Associate — Biographical Documentation</p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Event Coordinators (Database-driven Year-Wise) -->
+      <section class="people-group" id="group-coordinators" aria-label="Event Coordinators">
+        <button type="button" 
+                class="people-group-toggle" 
+                aria-expanded="true" 
+                aria-controls="content-coordinators" 
+                id="toggle-coordinators">
+          <div class="people-group-heading-lockup">
+            <span class="people-group-eyebrow">Academic & Colloquia Organization</span>
+            <h2 class="people-group-title">Event Coordinators</h2>
+          </div>
+          <span class="people-group-chevron-wrap" aria-hidden="true">
+            <svg class="people-group-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </span>
+        </button>
+        <div class="people-group-content" id="content-coordinators" role="region" aria-labelledby="toggle-coordinators">
+          <div class="people-group-inner">
+            <div id="coordinators-container" style="padding: 1.5rem 0;">
+              <div style="text-align: center; padding: 2.5rem 1rem; color: var(--slate);">
+                <div class="coming-soon-dot" style="margin: 0 auto 0.8rem; width: 10px; height: 10px; background-color: var(--gold);"></div>
+                <p style="font-family: var(--font-heading); font-size: 1.05rem; color: var(--navy); margin-bottom: 0.2rem;">Loading Event Coordinators...</p>
+                <span style="font-size: 0.82rem; color: var(--slate);">Connecting to institutional records</span>
               </div>
             </div>
           </div>
@@ -337,7 +367,11 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <div>© 2026 Harish-Chandra Research Centre, CSJMU Kanpur × IIT Kanpur.</div>
+                <div>© 2026 Harish-Chandra Research Centre, CSJMU Kanpur × IIT Kanpur.</div>
+        <div class="footer-developer-credit">
+          <span class="footer-dev-name">Designed & Developed by <strong>Harshit Gupta</strong></span>
+          <span class="footer-dev-qual">M.Sc. Mathematics with AI & DS</span>
+        </div>
         <div class="footer-utility">
           <a href="contact.html">Privacy</a>
           <span>·</span>
@@ -349,7 +383,11 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase.js"></script>
   <script src="js/navigation.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/coordinators.js"></script>
 </body>
 </html>

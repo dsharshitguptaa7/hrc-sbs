@@ -1,0 +1,1272 @@
+/* ==========================================================================
+   HARISH-CHANDRA RESEARCH CENTRE — AUDITORIUM INAUGURATION CEREMONY
+   School of Basic Sciences | CSJMU Kanpur × IIT Kanpur
+   ========================================================================== */
+
+:root {
+  /* Authentic Academic & Theatrical Color Tokens */
+  --auditorium-dark: #050B14;
+  --auditorium-navy: #0B1F33;
+  --velvet-navy-shadow: #02070E;
+  --velvet-navy-base: #0B1F33;
+  --velvet-navy-highlight: #15395B;
+  --velvet-sheen: #22517F;
+  --gold-antique: #C9A227;
+  --gold-bright: #D4AF37;
+  --gold-warm: #FFE599;
+  --gold-shadow: #73570F;
+  --ribbon-crimson: #9B0F17;
+  --ribbon-crimson-bright: #C71923;
+  --ribbon-crimson-dark: #58080D;
+  --wood-dark-plank: #1A110B;
+  --wood-light-plank: #281B12;
+  --champagne: #E8D7A8;
+  --ivory: #F7F4EC;
+  --warm-white: #FFFDF8;
+  --text-muted: #94A3B8;
+
+  /* Typography */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-quote: 'Cormorant Garamond', Garamond, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Easing curves */
+  --ease-curtain: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-snip: cubic-bezier(0.7, 0, 0.2, 1);
+  --ease-gentle: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Base & Resets
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: var(--auditorium-dark);
+  color: var(--warm-white);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Accessible Skip Link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 9999;
+  background: var(--gold-bright);
+  color: var(--auditorium-dark);
+  font-weight: 700;
+  padding: 0.8rem 1.4rem;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ==========================================================================
+   Top Header / Controls
+   ========================================================================== */
+.auditorium-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  background: linear-gradient(180deg, rgba(5, 11, 20, 0.95) 0%, rgba(5, 11, 20, 0.6) 70%, transparent 100%);
+  z-index: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.header-seal {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--champagne);
+  font-weight: 500;
+}
+
+.seal-lamp {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold-bright);
+  box-shadow: 0 0 6px var(--gold-bright);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.btn-topbar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(11, 31, 51, 0.7);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-radius: 20px;
+  color: var(--champagne);
+  padding: 0.32rem 0.85rem;
+  font-size: 0.76rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(6px);
+}
+.btn-topbar:hover {
+  background: rgba(21, 57, 91, 0.85);
+  border-color: var(--gold-bright);
+  color: var(--warm-white);
+}
+
+.btn-topbar .icon-speaker-on { display: none; }
+.btn-topbar.active .icon-speaker-on { display: block; }
+.btn-topbar.active .icon-speaker-off { display: none; }
+.btn-topbar.active { border-color: var(--gold-bright); color: #FFF; }
+
+.direct-portal-link {
+  color: var(--champagne);
+  text-decoration: none;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.6rem;
+  transition: color 0.2s ease;
+}
+.direct-portal-link:hover {
+  color: var(--gold-bright);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Auditorium Stage Viewport & Proscenium Architecture
+   ========================================================================== */
+.auditorium-stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, #0F2236 0%, #071321 45%, #03080F 100%);
+  perspective: 1200px;
+}
+
+/* Theatrical Spotlights */
+.theatrical-lights {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+  transition: opacity 1.8s ease;
+}
+
+.spotlight {
+  position: absolute;
+  top: -15%;
+  height: 130%;
+  pointer-events: none;
+  opacity: 0.12;
+  mix-blend-mode: screen;
+  transition: opacity 2s var(--ease-gentle);
+}
+
+.beam-left {
+  left: -10%;
+  width: 55%;
+  background: conic-gradient(from 130deg at 20% 0%, transparent 0deg, rgba(255, 238, 194, 0.35) 18deg, rgba(201, 162, 39, 0.12) 32deg, transparent 42deg);
+  transform: rotate(-8deg);
+}
+
+.beam-right {
+  right: -10%;
+  width: 55%;
+  background: conic-gradient(from 195deg at 80% 0%, transparent 0deg, rgba(201, 162, 39, 0.12) 12deg, rgba(255, 238, 194, 0.35) 24deg, transparent 42deg);
+  transform: rotate(8deg);
+}
+
+.beam-center {
+  left: 25%;
+  right: 25%;
+  width: 50%;
+  background: radial-gradient(ellipse at 50% 20%, rgba(255, 253, 248, 0.2) 0%, rgba(201, 162, 39, 0.08) 45%, transparent 75%);
+  opacity: 0.15;
+}
+
+.stage-warmth-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(201, 162, 39, 0.06) 0%, transparent 70%);
+  opacity: 0.2;
+  transition: opacity 2s ease;
+}
+
+/* Light intensity during phases */
+body[data-phase="curtain-reveal"] .spotlight,
+body[data-phase="ribbon-prompt"] .spotlight {
+  opacity: 0.42;
+}
+body[data-phase="ribbon-cutting"] .spotlight {
+  opacity: 0.6;
+}
+body[data-phase="grand-reveal"] .spotlight {
+  opacity: 0.55;
+}
+body[data-phase="grand-reveal"] .stage-warmth-glow {
+  opacity: 0.65;
+}
+
+/* Atmospheric Dust & Flakes Canvas */
+.ceremony-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 60;
+  pointer-events: none;
+}
+
+/* Proscenium Arch Framing */
+.proscenium-frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 450;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.95);
+}
+
+.proscenium-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  background: linear-gradient(180deg, #020509 0%, #08111C 80%, #03070D 100%);
+  border-bottom: 2px solid rgba(201, 162, 39, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.proscenium-brass-plaque {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 1.4rem;
+  background: linear-gradient(180deg, #182838 0%, #0B1724 100%);
+  border: 1px solid rgba(201, 162, 39, 0.5);
+  border-radius: 3px;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--champagne);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.proscenium-pillar {
+  position: absolute;
+  top: 52px;
+  bottom: 0;
+  width: 32px;
+  background: linear-gradient(90deg, #020509 0%, #091320 60%, #040810 100%);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+}
+.pillar-left { left: 0; border-right: 1px solid rgba(201, 162, 39, 0.2); }
+.pillar-right { right: 0; border-left: 1px solid rgba(201, 162, 39, 0.2); }
+
+/* ==========================================================================
+   Real Dark Hardwood Stage Floor
+   ========================================================================== */
+.stage-hardwood-floor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 24vh;
+  min-height: 140px;
+  z-index: 70;
+  pointer-events: none;
+  overflow: hidden;
+  border-top: 2px solid rgba(201, 162, 39, 0.35);
+  box-shadow: 0 -12px 35px rgba(0, 0, 0, 0.85);
+}
+
+.wood-plank-surface {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #130B07 0px,
+      #130B07 90px,
+      #090503 90px,
+      #090503 92px,
+      #1C100A 92px,
+      #1C100A 180px
+    );
+  opacity: 0.95;
+}
+
+.wood-spotlight-pool {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 238, 194, 0.18) 0%, rgba(201, 162, 39, 0.08) 45%, transparent 75%);
+  mix-blend-mode: screen;
+}
+
+.stage-apron-shadow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(3, 7, 13, 0.7) 65%, #020509 100%);
+}
+
+/* ==========================================================================
+   Stage Rear Wall & Academic Backdrop
+   ========================================================================== */
+.stage-rear-backdrop {
+  position: absolute;
+  top: 52px;
+  bottom: 23vh;
+  left: 32px;
+  right: 32px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  transition: opacity 1.6s var(--ease-gentle), transform 1.6s var(--ease-gentle);
+}
+
+body[data-phase="anticipation"] .stage-rear-backdrop {
+  opacity: 0.15;
+  transform: scale(0.97);
+}
+body[data-phase="curtain-reveal"] .stage-rear-backdrop,
+body[data-phase="ribbon-prompt"] .stage-rear-backdrop,
+body[data-phase="ribbon-cutting"] .stage-rear-backdrop {
+  opacity: 0.95;
+  transform: scale(1);
+}
+body[data-phase="grand-reveal"] .stage-rear-backdrop {
+  opacity: 1;
+  transform: scale(1.01);
+}
+
+.backdrop-acoustic-panel {
+  width: min(880px, 92vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.institutional-backdrop-board {
+  width: 100%;
+  padding: 2.2rem 2.8rem;
+  border-radius: 14px;
+  background: radial-gradient(ellipse at 50% 25%, rgba(16, 42, 69, 0.88) 0%, rgba(7, 20, 34, 0.94) 100%);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  box-shadow: 0 25px 70px -10px rgba(0, 0, 0, 0.95), 0 0 50px rgba(201, 162, 39, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+/* Authentic Logos Row */
+.backdrop-logos-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  background: rgba(4, 11, 20, 0.7);
+  border: 1px solid rgba(201, 162, 39, 0.28);
+  padding: 0.7rem 1.8rem;
+  border-radius: 36px;
+  margin-bottom: 1.3rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.inst-logo-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+}
+
+.inst-logo-img {
+  height: 42px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+.logo-hrc-frame .inst-logo-img { height: 46px; }
+
+.backdrop-logos-separator {
+  width: 1px;
+  height: 26px;
+  background: linear-gradient(180deg, transparent 0%, rgba(201, 162, 39, 0.4) 50%, transparent 100%);
+}
+
+/* Institutional Hierarchy */
+.backdrop-school-meta {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--champagne);
+  margin-bottom: 0.3rem;
+}
+
+.backdrop-centre-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.05;
+  margin-bottom: 0.8rem;
+}
+
+.title-primary {
+  font-family: var(--font-heading);
+  font-size: clamp(2.1rem, 4.4vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF4D0 40%, #E8C34E 85%, #C9A227 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 3px 12px rgba(201, 162, 39, 0.35));
+}
+
+.title-secondary {
+  font-family: var(--font-quote);
+  font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--champagne);
+  margin-top: 0.15rem;
+}
+
+.backdrop-univ-meta {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+.backdrop-collab-line {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin: 0.35rem 0;
+}
+.backdrop-collab-line .line-bar {
+  width: 40px;
+  height: 1px;
+  background: rgba(201, 162, 39, 0.45);
+}
+.backdrop-collab-line .line-text {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--gold-bright);
+}
+
+.backdrop-partner-meta {
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: #FFFFFF;
+}
+
+.backdrop-motto {
+  font-family: var(--font-quote);
+  font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+  font-style: italic;
+  color: var(--champagne);
+  margin-top: 0.4rem;
+}
+
+/* Phase 4: Welcome Declaration Card (Revealed after cut) */
+.welcome-declaration-card {
+  margin-top: 1.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(201, 162, 39, 0.35);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+body[data-phase="grand-reveal"] .welcome-declaration-card {
+  display: flex;
+  animation: revealFadeIn 1.2s var(--ease-gentle) forwards;
+}
+
+@keyframes revealFadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.declaration-ribbon-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.65rem;
+}
+.declaration-ribbon-tag .tag-star {
+  color: var(--gold-bright);
+  font-size: 0.85rem;
+}
+.declaration-ribbon-tag .tag-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: var(--gold-bright);
+}
+
+.declaration-welcome-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--warm-white);
+  margin-bottom: 0.4rem;
+}
+
+.declaration-supporting-text {
+  font-size: 0.92rem;
+  color: var(--champagne);
+  max-width: 560px;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.declaration-button-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-enter-website {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 2.6rem;
+  background: linear-gradient(135deg, #FFEAA7 0%, #D4AF37 50%, #B8860B 100%);
+  border: 1px solid #FFF5C2;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--auditorium-dark);
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(201, 162, 39, 0.45);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.btn-enter-website:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 35px rgba(201, 162, 39, 0.65);
+}
+
+.btn-replay-experience {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.6rem;
+  background: rgba(16, 42, 69, 0.7);
+  border: 1px solid rgba(201, 162, 39, 0.35);
+  border-radius: 6px;
+  color: var(--champagne);
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-replay-experience:hover {
+  background: rgba(30, 78, 121, 0.9);
+  color: var(--warm-white);
+  border-color: var(--gold-bright);
+}
+
+/* ==========================================================================
+   Ceremonial Horizontal Ribbon & Brass Stanchions
+   ========================================================================== */
+.ceremonial-ribbon-installation {
+  position: absolute;
+  bottom: 23vh;
+  left: 0;
+  right: 0;
+  height: 180px;
+  z-index: 120;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: opacity 1s ease;
+}
+
+body[data-phase="anticipation"] .ceremonial-ribbon-installation {
+  opacity: 0.25;
+}
+body[data-phase="curtain-reveal"] .ceremonial-ribbon-installation,
+body[data-phase="ribbon-prompt"] .ceremonial-ribbon-installation,
+body[data-phase="ribbon-cutting"] .ceremonial-ribbon-installation {
+  opacity: 1;
+}
+body[data-phase="grand-reveal"] .ceremonial-ribbon-installation {
+  opacity: 0.55;
+  transition: opacity 2s ease;
+}
+
+/* Physical Brass Stanchions */
+.brass-stanchion {
+  position: absolute;
+  bottom: 0;
+  width: 32px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.stanchion-left { left: 16%; }
+.stanchion-right { right: 16%; }
+
+.stanchion-finial-ball {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #FFF5C2 0%, #D4AF37 55%, #664B07 100%);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+}
+
+.stanchion-collar {
+  width: 24px;
+  height: 6px;
+  background: linear-gradient(90deg, #7A5B0B 0%, #FFEAA7 50%, #7A5B0B 100%);
+  border-radius: 2px;
+}
+
+.stanchion-shaft {
+  width: 10px;
+  flex: 1;
+  background: linear-gradient(90deg, #664906 0%, #FFDF7A 45%, #C9A227 75%, #4A3503 100%);
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.6);
+}
+
+.stanchion-weighted-base {
+  width: 36px;
+  height: 12px;
+  border-radius: 6px 6px 2px 2px;
+  background: linear-gradient(90deg, #5C4104 0%, #FFEAA7 40%, #C9A227 70%, #3B2A03 100%);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.85);
+}
+
+.stanchion-floor-shadow {
+  position: absolute;
+  bottom: -4px;
+  width: 48px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.75);
+  filter: blur(3px);
+}
+
+/* Horizontal Ribbon Span Across Stanchions */
+.ribbon-horizontal-span {
+  position: absolute;
+  bottom: 122px; /* Positioned at stanchion ring level */
+  left: calc(16% + 14px);
+  right: calc(16% + 14px);
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ribbon-half {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 24px;
+  transition: transform 1.2s var(--ease-snip), opacity 1s ease;
+}
+
+.ribbon-half-left {
+  left: 0;
+  transform-origin: left center;
+}
+
+.ribbon-half-right {
+  right: 0;
+  transform-origin: right center;
+}
+
+.satin-ribbon-strap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, var(--ribbon-crimson-bright) 0%, var(--ribbon-crimson) 50%, var(--ribbon-crimson-dark) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 1px 3px rgba(155, 15, 23, 0.5);
+  overflow: hidden;
+}
+
+.satin-sheen-highlight {
+  position: absolute;
+  top: 3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.45) 50%, rgba(255, 255, 255, 0.15) 100%);
+}
+
+.ribbon-gold-piping {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, #A8841B 0%, #FFEAA7 50%, #A8841B 100%);
+}
+.piping-top { top: 1px; }
+.piping-bottom { bottom: 1px; }
+
+/* Loose dangling tails after cutting */
+.ribbon-hanging-tail {
+  position: absolute;
+  top: 100%;
+  width: 24px;
+  height: 0;
+  background: linear-gradient(180deg, var(--ribbon-crimson) 0%, var(--ribbon-crimson-dark) 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: height 1s var(--ease-snip), opacity 0.8s ease;
+}
+.tail-left { left: 0; border-radius: 0 0 4px 4px; }
+.tail-right { right: 0; border-radius: 0 0 4px 4px; }
+
+/* Center Rosette / Knot */
+.ribbon-center-knot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  z-index: 130;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.rosette-satin-folds {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ribbon-crimson-bright) 0%, var(--ribbon-crimson-dark) 100%);
+  border: 1.5px solid #FFEAA7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.rosette-gold-clasp {
+  position: relative;
+  z-index: 2;
+}
+
+/* Ribbon Cut Spark */
+.ribbon-snip-spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFF 0%, rgba(255, 234, 167, 0.9) 35%, rgba(201, 162, 39, 0.4) 65%, transparent 80%);
+  opacity: 0;
+  z-index: 145;
+}
+.ribbon-snip-spark.active {
+  animation: sparkBurst 0.65s var(--ease-gentle) forwards;
+}
+@keyframes sparkBurst {
+  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 1; }
+  60% { transform: translate(-50%, -50%) scale(2.4); opacity: 0.9; }
+  100% { transform: translate(-50%, -50%) scale(3.2); opacity: 0; }
+}
+
+/* Ribbon cut states */
+body[data-phase="ribbon-cutting"] .ribbon-half-left,
+body[data-phase="grand-reveal"] .ribbon-half-left {
+  transform: rotate(26deg) translateY(32px) scaleX(0.85);
+  opacity: 0.85;
+}
+body[data-phase="ribbon-cutting"] .ribbon-half-right,
+body[data-phase="grand-reveal"] .ribbon-half-right {
+  transform: rotate(-26deg) translateY(32px) scaleX(0.85);
+  opacity: 0.85;
+}
+body[data-phase="ribbon-cutting"] .ribbon-center-knot,
+body[data-phase="grand-reveal"] .ribbon-center-knot {
+  transform: translate(-50%, 40px) scale(0);
+  opacity: 0;
+}
+body[data-phase="ribbon-cutting"] .ribbon-hanging-tail,
+body[data-phase="grand-reveal"] .ribbon-hanging-tail {
+  height: 80px;
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   Golden Ceremonial Scissors
+   ========================================================================== */
+.golden-ceremonial-scissors {
+  position: absolute;
+  left: 50%;
+  bottom: 110px;
+  transform: translate(-40%, -15px) scale(0.9);
+  z-index: 140;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.7));
+  opacity: 0;
+  transition: transform 0.8s var(--ease-gentle), opacity 0.6s ease;
+}
+
+body[data-phase="curtain-reveal"] .golden-ceremonial-scissors,
+body[data-phase="ribbon-prompt"] .golden-ceremonial-scissors {
+  opacity: 1;
+  transform: translate(-40%, -8px) scale(1);
+}
+
+.blade-upper, .blade-lower {
+  transform-origin: 50px 50px;
+  transition: transform 0.35s var(--ease-snip);
+}
+
+/* Blades ready position */
+.golden-ceremonial-scissors.ready-to-cut .blade-upper {
+  transform: rotate(-15deg);
+}
+.golden-ceremonial-scissors.ready-to-cut .blade-lower {
+  transform: rotate(15deg);
+}
+
+/* Blades snip action */
+.golden-ceremonial-scissors.cutting .blade-upper {
+  transform: rotate(1.5deg);
+}
+.golden-ceremonial-scissors.cutting .blade-lower {
+  transform: rotate(-1.5deg);
+}
+
+body[data-phase="ribbon-cutting"] .golden-ceremonial-scissors {
+  opacity: 1;
+  transform: translate(-40%, 0) scale(1.05);
+}
+body[data-phase="grand-reveal"] .golden-ceremonial-scissors {
+  opacity: 0;
+  transform: translate(-40%, -45px) scale(0.85);
+}
+
+/* ==========================================================================
+   Authentic Velvet Stage Curtains
+   ========================================================================== */
+.stage-velvet-curtains {
+  position: absolute;
+  inset: 0;
+  z-index: 300;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Top Pelmet / Valance Drapery */
+.curtains-top-pelmet {
+  position: absolute;
+  top: 52px; /* sits right under proscenium header */
+  left: 0;
+  right: 0;
+  height: 75px;
+  z-index: 330;
+  background: linear-gradient(180deg, #02070E 0%, #0B1F33 75%, #050E18 100%);
+  border-bottom: 2px solid var(--gold-bright);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.85);
+}
+
+.pelmet-drape-swag {
+  position: absolute;
+  top: 10px;
+  height: 52px;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  background: radial-gradient(ellipse at 50% 0%, #15395B 0%, #0B1F33 60%, #030A12 100%);
+  border-bottom: 1.5px solid rgba(212, 175, 55, 0.5);
+}
+.swag-l { left: 5%; width: 28%; }
+.swag-c { left: 35%; width: 30%; }
+.swag-r { right: 5%; width: 28%; }
+
+.pelmet-bullion-fringe {
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(90deg, #D4AF37 0px, #D4AF37 3px, #7A5B0B 3px, #7A5B0B 6px);
+}
+
+/* Curtain Side Wings (Left & Right) */
+.curtain-side-wing {
+  position: absolute;
+  top: 52px;
+  bottom: 0;
+  width: 50.5%;
+  z-index: 320;
+  background: var(--velvet-navy-base);
+  transition: transform 2.5s var(--ease-curtain);
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+}
+
+.wing-left {
+  left: 0;
+  transform-origin: left center;
+}
+.wing-right {
+  right: 0;
+  transform-origin: right center;
+}
+
+/* Realistic Multi-Crease Vertical Velvet Folds */
+.velvet-folds-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.velvet-fold {
+  flex: 1;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--velvet-navy-shadow) 0%,
+    var(--velvet-navy-base) 20%,
+    var(--velvet-navy-highlight) 48%,
+    var(--velvet-sheen) 52%,
+    var(--velvet-navy-base) 80%,
+    var(--velvet-navy-shadow) 100%
+  );
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.7);
+}
+
+.curtain-gold-trim-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: linear-gradient(180deg, #FFEAA7 0%, #D4AF37 50%, #7A5B0B 100%);
+}
+.wing-left .curtain-gold-trim-edge { right: 0; }
+.wing-right .curtain-gold-trim-edge { left: 0; }
+
+.curtain-bottom-fringe {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: repeating-linear-gradient(90deg, #D4AF37 0px, #D4AF37 3px, #7A5B0B 3px, #7A5B0B 6px);
+  border-top: 1.5px solid #FFEAA7;
+}
+
+/* Center Light Slit (Phase 1 Anticipation) */
+.curtain-center-slit {
+  position: absolute;
+  top: 52px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  z-index: 315;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+.slit-light-beam {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 238, 194, 0.7) 50%, transparent 100%);
+  box-shadow: 0 0 20px 4px rgba(212, 175, 55, 0.7);
+  animation: beamGlow 4s infinite ease-in-out;
+}
+@keyframes beamGlow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Curtain Open Movement */
+body[data-phase="curtain-reveal"] .wing-left,
+body[data-phase="ribbon-prompt"] .wing-left,
+body[data-phase="ribbon-cutting"] .wing-left,
+body[data-phase="grand-reveal"] .wing-left {
+  transform: translateX(-88%) scaleX(0.42);
+}
+
+body[data-phase="curtain-reveal"] .wing-right,
+body[data-phase="ribbon-prompt"] .wing-right,
+body[data-phase="ribbon-cutting"] .wing-right,
+body[data-phase="grand-reveal"] .wing-right {
+  transform: translateX(88%) scaleX(0.42);
+}
+
+body[data-phase="curtain-reveal"] .curtain-center-slit,
+body[data-phase="ribbon-prompt"] .curtain-center-slit,
+body[data-phase="ribbon-cutting"] .curtain-center-slit,
+body[data-phase="grand-reveal"] .curtain-center-slit {
+  opacity: 0;
+}
+
+/* ==========================================================================
+   Interactive Flow Control Layer (Phased UI Prompts)
+   ========================================================================== */
+.stage-interactive-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 400;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ceremony-prompt-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.2rem 2.8rem;
+  max-width: 580px;
+  background: radial-gradient(ellipse at 50% 30%, rgba(11, 31, 51, 0.95) 0%, rgba(4, 11, 20, 0.98) 100%);
+  border: 1px solid rgba(201, 162, 39, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 40px rgba(201, 162, 39, 0.12);
+  backdrop-filter: blur(12px);
+  pointer-events: auto;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+/* Phase 1 Card */
+.prompt-anticipation {
+  display: flex;
+}
+body[data-phase="curtain-reveal"] .prompt-anticipation,
+body[data-phase="ribbon-prompt"] .prompt-anticipation,
+body[data-phase="ribbon-cutting"] .prompt-anticipation,
+body[data-phase="grand-reveal"] .prompt-anticipation {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+  display: none;
+}
+
+.prompt-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: var(--gold-bright);
+  margin-bottom: 0.8rem;
+}
+
+.prompt-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.6vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF5C2 40%, #D4AF37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.4rem;
+}
+
+.prompt-subtitle {
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  color: var(--champagne);
+  margin-bottom: 1.8rem;
+}
+
+/* Phase 3 Ribbon Cut Card */
+.prompt-ribbon-cut {
+  display: none;
+  position: absolute;
+  bottom: 8vh;
+  padding: 1.2rem 2.4rem;
+  border-radius: 40px;
+}
+body[data-phase="ribbon-prompt"] .prompt-ribbon-cut {
+  display: flex;
+  animation: slidePromptUp 0.8s var(--ease-gentle) forwards;
+}
+body[data-phase="ribbon-cutting"] .prompt-ribbon-cut,
+body[data-phase="grand-reveal"] .prompt-ribbon-cut {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  display: none;
+}
+
+@keyframes slidePromptUp {
+  0% { opacity: 0; transform: translateY(25px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.prompt-instruction {
+  font-family: var(--font-quote);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--champagne);
+  margin-bottom: 0.8rem;
+}
+
+/* Ceremonial Action Buttons */
+.btn-ceremonial-action {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #FFEAA7 0%, #D4AF37 45%, #B8860B 100%);
+  border: 1px solid #FFF5C2;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(201, 162, 39, 0.45);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-begin-inauguration {
+  padding: 1.1rem 2.8rem;
+}
+.btn-begin-inauguration .btn-primary-text {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--auditorium-dark);
+}
+.btn-begin-inauguration .btn-sub-hint {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #3D2C04;
+  margin-top: 0.2rem;
+}
+
+.btn-cut-ribbon {
+  flex-direction: row;
+  gap: 0.65rem;
+  padding: 0.85rem 2.4rem;
+  border-radius: 30px;
+}
+.btn-cut-ribbon svg {
+  color: var(--auditorium-dark);
+}
+.btn-cut-ribbon .btn-primary-text {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--auditorium-dark);
+}
+
+.btn-ceremonial-action:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(201, 162, 39, 0.65);
+}
+.btn-ceremonial-action:active {
+  transform: translateY(1px);
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 900px) {
+  .stanchion-left { left: 8%; }
+  .stanchion-right { right: 8%; }
+  .ribbon-horizontal-span {
+    left: calc(8% + 14px);
+    right: calc(8% + 14px);
+  }
+  .title-primary { font-size: 2.3rem; }
+  .title-secondary { font-size: 1.5rem; }
+}
+
+@media (max-width: 640px) {
+  .auditorium-header { padding: 0 0.8rem; }
+  .header-seal .seal-title { max-width: 170px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .btn-topbar .btn-text { display: none; }
+
+  .stanchion-left { left: 4%; }
+  .stanchion-right { right: 4%; }
+  .ribbon-horizontal-span {
+    left: calc(4% + 14px);
+    right: calc(4% + 14px);
+    bottom: 110px;
+  }
+  .brass-stanchion { height: 140px; }
+
+  .institutional-backdrop-board {
+    padding: 1.4rem 1.2rem;
+  }
+  .backdrop-logos-row {
+    gap: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+  .inst-logo-frame { height: 32px; }
+  .inst-logo-img { height: 28px; }
+
+  .title-primary { font-size: 1.7rem; }
+  .title-secondary { font-size: 1.2rem; }
+  .backdrop-school-meta { font-size: 0.72rem; }
+  .backdrop-univ-meta { font-size: 0.7rem; }
+  .backdrop-partner-meta { font-size: 0.76rem; }
+
+  .ceremony-prompt-card { padding: 1.5rem 1.2rem; width: 92vw; }
+  .btn-begin-inauguration { padding: 0.9rem 1.6rem; }
+  .btn-begin-inauguration .btn-primary-text { font-size: 0.95rem; }
+  .btn-enter-website { width: 100%; padding: 0.85rem; font-size: 0.85rem; }
+  .btn-replay-experience { width: 100%; justify-content: center; }
+}
+
+/* ==========================================================================
+   Prefers-Reduced-Motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .wing-left { transform: translateX(-88%) scaleX(0.42) !important; }
+  .wing-right { transform: translateX(88%) scaleX(0.42) !important; }
+  .stage-rear-backdrop { opacity: 1 !important; transform: scale(1) !important; }
+  .welcome-declaration-card { display: flex !important; opacity: 1 !important; }
+  .prompt-anticipation, .prompt-ribbon-cut { display: none !important; }
+  .ceremonial-ribbon-installation { opacity: 0.4 !important; }
+}

@@ -1176,6 +1176,42 @@ nav[aria-label="Primary Navigation"],
   color: var(--gold) !important;
 }
 
+/* Developer Credit */
+.footer-developer-credit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.76rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-dev-name {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.footer-dev-name strong {
+  color: var(--champagne);
+  font-weight: 600;
+}
+
+.footer-dev-qual {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.03em;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.1rem;
+  }
+}
+
 /* Subtle Scroll Animations */
 [data-reveal] {
   opacity: 0;
