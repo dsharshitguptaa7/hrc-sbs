@@ -209,7 +209,7 @@ async function renderExhibitionGrid(containerId = 'exhibition-tracks-grid', base
     if (assignedProjects.length > 0) {
       return assignedProjects.map(p => {
         const studentName = escapeHtml(p.student_name || p.team_name || 'Student Contributor');
-        const course = p.course ? escapeHtml(p.course) : '';
+        const course = p.course?.trim() ? escapeHtml(p.course.trim()) : '';
         const year = p.year || 2026;
         const metaLine = course ? `${course} · ${year}` : `${year}`;
         const projectUrl = escapeHtml(p.project_url || '#');

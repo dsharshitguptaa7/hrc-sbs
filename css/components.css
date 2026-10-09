@@ -105,6 +105,13 @@
 
 .lecture-content-panel {
   padding: 2.8rem;
+  opacity: 1 !important;
+  animation: panelFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes panelFadeIn {
+  from { opacity: 0.2; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .lecture-edition-header {

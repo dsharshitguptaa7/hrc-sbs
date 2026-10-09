@@ -85,7 +85,7 @@ function renderProjectsTable(projects) {
     const trackNumStr = String(p.track_number).padStart(2, '0');
     const trackTitle = escapeHtml(p.title || OFFICIAL_TRACKS[p.track_number]?.title || `Track ${trackNumStr}`);
     const student = escapeHtml(p.student_name || p.team_name || '—');
-    const course = escapeHtml(p.course || '—');
+    const course = escapeHtml(p.course?.trim() || '—');
     const year = p.year || 2026;
     const projectUrl = p.project_url ? escapeHtml(p.project_url) : '';
     const isPub = !!p.published;
@@ -195,7 +195,8 @@ async function saveProject() {
   const track_number = parseInt(document.getElementById('project-track-select').value, 10);
   const title = document.getElementById('project-track-name').value.trim();
   const student_name = document.getElementById('project-student-name').value.trim();
-  const course = document.getElementById('project-course').value.trim();
+  const courseInput = document.getElementById('project-course');
+  const course = courseInput ? courseInput.value.trim() : '';
   const year = parseInt(document.getElementById('project-year').value, 10) || 2026;
   const project_url = document.getElementById('project-url').value.trim();
   const published = document.getElementById('project-published').checked;
@@ -245,44 +246,51 @@ async function saveProject() {
       title,
       student_name,
       team_name: student_name,
+      course: course || null,
       year,
       project_url,
       published,
       updated_at: new Date()
     };
 
-    // Include course field
-    if (course) {
-      payload.course = course;
-    } else {
-      payload.course = null;
-    }
+    let savedRecord = null;
 
     if (currentEditingProjectId) {
       // UPDATE
-      let { error } = await sb.from('exhibition_projects').update(payload).eq('id', currentEditingProjectId);
-      if (error && error.message && error.message.includes('course')) {
-        // Fallback if course column was not yet applied
-        delete payload.course;
-        const res = await sb.from('exhibition_projects').update(payload).eq('id', currentEditingProjectId);
-        if (res.error) throw res.error;
-      } else if (error) {
-        throw error;
+      const { data, error } = await sb
+        .from('exhibition_projects')
+        .update(payload)
+        .eq('id', currentEditingProjectId)
+        .select();
+
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        throw new Error('Supabase did not return the updated record.');
       }
+      savedRecord = data[0];
       showToast('Project updated successfully.');
     } else {
       // INSERT
       payload.slug = generateSlug(track_number, title, student_name);
-      let { error } = await sb.from('exhibition_projects').insert([payload]);
-      if (error && error.message && error.message.includes('course')) {
-        // Fallback if course column was not yet applied
-        delete payload.course;
-        const res = await sb.from('exhibition_projects').insert([payload]);
-        if (res.error) throw res.error;
-      } else if (error) {
-        throw error;
+      const { data, error } = await sb
+        .from('exhibition_projects')
+        .insert([payload])
+        .select();
+
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        throw new Error('Supabase did not return the inserted record.');
       }
+      savedRecord = data[0];
       showToast('Student project added successfully.');
+    }
+
+    // Diagnostic verification of persisted record
+    if (course && savedRecord && (!savedRecord.course || savedRecord.course.trim() !== course)) {
+      console.warn('[HRC Admin] Course field verification warning: persisted value does not match expected value.', {
+        persisted: savedRecord.course,
+        expected: course
+      });
     }
 
     closeProjectModal();

@@ -182,7 +182,7 @@
     <div class="admin-modal">
       <div class="admin-modal-header">
         <div>
-          <h3>Add Academic Lecture / Talk</h3>
+          <h3 id="modal-lecture-title">Add Academic Lecture / Talk</h3>
           <div id="lecture-modal-subtitle" style="font-size: 0.78rem; color: var(--admin-text-muted);"></div>
         </div>
         <button class="admin-modal-close" onclick="closeLectureModal()">&times;</button>
@@ -219,7 +219,7 @@
 
           <div style="display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.5rem;">
             <button type="button" class="admin-btn admin-btn-outline" onclick="closeLectureModal()">Cancel</button>
-            <button type="submit" class="admin-btn admin-btn-primary">Attach Talk to Year</button>
+            <button type="submit" id="lecture-submit-btn" class="admin-btn admin-btn-primary">Attach Talk to Year</button>
           </div>
         </form>
       </div>
