@@ -20,12 +20,17 @@
     gap: 0.3rem;
   }
 
-  .brand-logo-img {
+  .brand-logo-img:not(.hrc-logo),
+  .institution-logo {
+    width: 32px;
     height: 32px;
+    max-width: 32px;
+    max-height: 32px;
   }
 
   .brand-logo-img.hrc-logo {
     height: 34px;
+    width: auto;
   }
 
   .brand-separator {
@@ -167,12 +172,17 @@
     gap: 0.35rem;
   }
 
-  .brand-logo-img {
+  .brand-logo-img:not(.hrc-logo),
+  .institution-logo {
+    width: 30px;
     height: 30px;
+    max-width: 30px;
+    max-height: 30px;
   }
 
   .brand-logo-img.hrc-logo {
     height: 32px;
+    width: auto;
   }
 
   .brand-title {
