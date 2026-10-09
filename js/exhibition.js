@@ -19,7 +19,7 @@ const exhibitionTracks = [
     num: "02",
     total: "12",
     code: "legacy",
-    title: "Legacy of Dr. Harishchandra",
+    title: "Legacy of Harish-Chandra",
     eyebrow: "HISTORICAL IMPACT",
     description: "A deep assessment of his mathematical architecture, fundamental discoveries, and long-term impact on modern physics and harmonic analysis.",
     path: "exhibition/legacy.html",
@@ -29,7 +29,7 @@ const exhibitionTracks = [
     num: "03",
     total: "12",
     code: "archive",
-    title: "Harishchandra Digital Archive",
+    title: "Harish-Chandra Digital Archive",
     eyebrow: "ARCHIVAL CORPUS",
     description: "Photographs, manuscripts, institutional correspondence, verified publications, and historical ephemera preserved for research.",
     path: "exhibition/archive.html",
@@ -39,7 +39,7 @@ const exhibitionTracks = [
     num: "04",
     total: "12",
     code: "timeline",
-    title: "The Harishchandra Timeline",
+    title: "The Harish-Chandra Timeline",
     eyebrow: "CHRONOLOGY",
     description: "Major milestones, turning points, mathematical breakthroughs, and institutional appointments presented in a precision chronological stream.",
     path: "exhibition/timeline.html",
@@ -59,7 +59,7 @@ const exhibitionTracks = [
     num: "06",
     total: "12",
     code: "quiz",
-    title: "Dr. Harishchandra Quiz",
+    title: "Harish-Chandra Quiz",
     eyebrow: "SCHOLARLY CHALLENGE",
     description: "An intellectual assessment tool testing knowledge of Harish-Chandra's life, peer circle, scientific legacy, and mathematical milestones.",
     path: "exhibition/quiz.html",
@@ -69,7 +69,7 @@ const exhibitionTracks = [
     num: "07",
     total: "12",
     code: "know-harishchandra",
-    title: "Know Dr. Harishchandra",
+    title: "Know Harish-Chandra",
     eyebrow: "DID YOU KNOW & INSIGHTS",
     description: "Curated facts, flashcards, archival anecdotes, and concise knowledge cards illuminating the humane, artistic, and disciplined mind.",
     path: "exhibition/know-harishchandra.html",
@@ -99,7 +99,7 @@ const exhibitionTracks = [
     num: "10",
     total: "12",
     code: "harishchandra-day",
-    title: "Harishchandra Day 2026 Microsite",
+    title: "Harish-Chandra Day 2026 Microsite",
     eyebrow: "CENTENARY CELEBRATION",
     description: "The official conference microsite with schedule, speakers, student competitions, registration portal, and centenary proceedings.",
     path: "exhibition/harishchandra-day.html",
@@ -369,7 +369,7 @@ function showQuizResults() {
       <div class="chapter-badge">ASSESSMENT COMPLETE</div>
       <h3 style="font-size: 2rem; margin: 0.6rem 0; color: var(--navy);">Final Score: ${userScore} / ${quizQuestions.length} (${percentage}%)</h3>
       <p style="max-width: 500px; margin: 0 auto 1.8rem; color: var(--charcoal-light);">
-        ${percentage >= 80 ? 'Exceptional scholarship. You have a profound command of Dr. Harish-Chandra\'s historical legacy and mathematical journey.' : 'Thank you for exploring Dr. Harish-Chandra\'s heritage. We encourage you to visit the Digital Archive and Biography for deeper insights.'}
+        ${percentage >= 80 ? 'Exceptional scholarship. You have a profound command of Harish-Chandra\'s historical legacy and mathematical journey.' : 'Thank you for exploring Harish-Chandra\'s heritage. We encourage you to visit the Digital Archive and Biography for deeper insights.'}
       </p>
       <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
         <button class="btn btn-gold" onclick="resetQuiz()">Retake Quiz</button>

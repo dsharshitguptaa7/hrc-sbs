@@ -6,7 +6,32 @@
 document.addEventListener('DOMContentLoaded', () => {
   initEventFiltering();
   initGlobalKeyboard();
+  initPeopleCollapsibleGroups();
 });
+
+// Collapsible group logic for people.html
+function initPeopleCollapsibleGroups() {
+  const toggles = document.querySelectorAll('.people-group-toggle');
+  if (!toggles.length) return;
+
+  toggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+      const targetId = toggle.getAttribute('aria-controls');
+      const content = document.getElementById(targetId);
+
+      if (!content) return;
+
+      if (isExpanded) {
+        toggle.setAttribute('aria-expanded', 'false');
+        content.classList.add('collapsed');
+      } else {
+        toggle.setAttribute('aria-expanded', 'true');
+        content.classList.remove('collapsed');
+      }
+    });
+  });
+}
 
 // Event filter logic for events.html
 function initEventFiltering() {

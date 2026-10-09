@@ -6,15 +6,15 @@
 
 const OFFICIAL_TRACKS = {
   1: { title: 'Digital Biography', slug: 'biography' },
-  2: { title: 'Legacy of Dr. Harishchandra', slug: 'legacy' },
-  3: { title: 'Harishchandra Digital Archive', slug: 'archive' },
-  4: { title: 'The Harishchandra Timeline', slug: 'timeline' },
+  2: { title: 'Legacy of Harish-Chandra', slug: 'legacy' },
+  3: { title: 'Harish-Chandra Digital Archive', slug: 'archive' },
+  4: { title: 'The Harish-Chandra Timeline', slug: 'timeline' },
   5: { title: 'Research Explorer', slug: 'research-explorer' },
-  6: { title: 'Dr. Harishchandra Quiz', slug: 'quiz' },
-  7: { title: 'Know Dr. Harishchandra', slug: 'know-harishchandra' },
+  6: { title: 'Harish-Chandra Quiz', slug: 'quiz' },
+  7: { title: 'Know Harish-Chandra', slug: 'know-harishchandra' },
   8: { title: 'Legacy Map', slug: 'legacy-map' },
   9: { title: 'Digital Tribute Wall', slug: 'tribute-wall' },
-  10: { title: 'Harishchandra Day 2026 Microsite', slug: 'harishchandra-day' },
+  10: { title: 'Harish-Chandra Day 2026 Microsite', slug: 'harishchandra-day' },
   11: { title: 'Then & Now', slug: 'then-and-now' },
   12: { title: 'Interactive Exhibition', slug: 'interactive-exhibition' }
 };

@@ -15,7 +15,7 @@ const fallbackLectureSeries = [
     title: "Centenary & Digital Legacy Harish-Chandra Colloquium",
     date: "October 11, 2026",
     venue: "CSJMU Kanpur & IIT Kanpur Joint Amphitheatre",
-    description: "Centenary Edition. A global academic congress convening scholars, mathematicians, and students to commemorate the 100-year legacy of Dr. Harish-Chandra and celebrate the culmination of the 12 Digital Legacy tracks.",
+    description: "Centenary Edition. A global academic congress convening scholars, mathematicians, and students to commemorate the 100-year legacy of Harish-Chandra and celebrate the culmination of the 12 Digital Legacy tracks.",
     speakers: [
       {
         name: "[KEYNOTE SPEAKER TO BE ANNOUNCED]",
