@@ -93,7 +93,7 @@ function openEditPosterModal(id) {
   document.getElementById('modal-poster-title').textContent = `Edit Poster: ${p.title}`;
   document.getElementById('poster-title').value = p.title;
   document.getElementById('poster-year').value = p.year;
-  document.getElementById('poster-category').value = p.category || 'lecture';
+  document.getElementById('poster-category').value = p.category || 'Annual Memorial Lecture';
   document.getElementById('poster-desc').value = p.description || '';
   document.getElementById('poster-image-url').value = p.image_url || '';
   document.getElementById('poster-published').checked = p.published;

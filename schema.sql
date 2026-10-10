@@ -101,11 +101,20 @@ CREATE TABLE IF NOT EXISTS public.gallery_albums (
     description TEXT,
     year INTEGER NOT NULL CHECK (year >= 1923 AND year <= 2100),
     event_id UUID REFERENCES public.events(id) ON DELETE SET NULL,
+    category TEXT DEFAULT 'Institutional Events',
+    event_date DATE,
     cover_image_url TEXT,
+    display_order INTEGER NOT NULL DEFAULT 0,
     published BOOLEAN NOT NULL DEFAULT true,
     created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now()),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
 );
+
+-- Migration support for gallery_albums
+ALTER TABLE public.gallery_albums
+ADD COLUMN IF NOT EXISTS category TEXT DEFAULT 'Institutional Events',
+ADD COLUMN IF NOT EXISTS event_date DATE,
+ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0;
 
 -- 9. GALLERY IMAGES TABLE
 CREATE TABLE IF NOT EXISTS public.gallery_images (
@@ -115,8 +124,15 @@ CREATE TABLE IF NOT EXISTS public.gallery_images (
     caption TEXT,
     alt_text TEXT,
     sort_order INTEGER NOT NULL DEFAULT 0,
+    aspect_ratio TEXT DEFAULT '16:9',
+    orientation TEXT DEFAULT 'landscape',
     created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
 );
+
+-- Migration support for gallery_images
+ALTER TABLE public.gallery_images
+ADD COLUMN IF NOT EXISTS aspect_ratio TEXT DEFAULT '16:9',
+ADD COLUMN IF NOT EXISTS orientation TEXT DEFAULT 'landscape';
 
 -- 10. RESEARCH PAPERS TABLE (PDF upload supported)
 CREATE TABLE IF NOT EXISTS public.research_papers (

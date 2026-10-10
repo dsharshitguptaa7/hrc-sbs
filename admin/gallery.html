@@ -96,28 +96,85 @@
         <div class="admin-header-row">
           <div>
             <h1>Photo Albums Registry</h1>
-            <p>Manage year-wise archival albums and upload high-resolution photographs.</p>
+            <p>Manage year-wise archival albums, upload high-resolution photographs, and organize institutional celebrations.</p>
           </div>
           <button class="admin-btn admin-btn-primary" onclick="openCreateAlbumModal()">+ Create Album</button>
         </div>
 
+        <!-- Metric Summary Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+          <div class="admin-card" style="margin-bottom: 0; padding: 1.2rem;">
+            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--admin-text-muted); letter-spacing: 0.05em;">Total Albums</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: var(--admin-sidebar); margin-top: 0.2rem;" id="stat-total-albums">0</div>
+          </div>
+          <div class="admin-card" style="margin-bottom: 0; padding: 1.2rem;">
+            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--admin-text-muted); letter-spacing: 0.05em;">Published Albums</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: var(--admin-success); margin-top: 0.2rem;" id="stat-published-albums">0</div>
+          </div>
+          <div class="admin-card" style="margin-bottom: 0; padding: 1.2rem;">
+            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--admin-text-muted); letter-spacing: 0.05em;">Archival Photographs</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: var(--admin-blue); margin-top: 0.2rem;" id="stat-total-photos">0</div>
+          </div>
+          <div class="admin-card" style="margin-bottom: 0; padding: 1.2rem;">
+            <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--admin-text-muted); letter-spacing: 0.05em;">Years Active</div>
+            <div style="font-size: 1.8rem; font-weight: 700; color: var(--admin-gold); margin-top: 0.2rem;" id="stat-active-years">0</div>
+          </div>
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="admin-card" style="margin-bottom: 1.2rem; padding: 1rem 1.4rem;">
+          <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; justify-content: space-between;">
+            <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; flex-grow: 1;">
+              <input type="text" id="filter-search" class="admin-form-control" placeholder="Search albums by title or keywords..." style="max-width: 260px;" oninput="applyAlbumFilters()">
+              
+              <select id="filter-year" class="admin-form-control" style="max-width: 160px;" onchange="applyAlbumFilters()">
+                <option value="all">All Years</option>
+              </select>
+
+              <select id="filter-category" class="admin-form-control" style="max-width: 200px;" onchange="applyAlbumFilters()">
+                <option value="all">All Categories</option>
+                <option value="Inauguration">Inauguration</option>
+                <option value="Annual Memorial Lecture">Annual Memorial Lecture</option>
+                <option value="Birth Anniversary Celebration">Birth Anniversary Celebration</option>
+                <option value="Workshops & Conferences">Workshops & Conferences</option>
+                <option value="Student Activities">Student Activities</option>
+                <option value="Institutional Events">Institutional Events</option>
+                <option value="Historical Archives">Historical Archives</option>
+                <option value="Other">Other</option>
+              </select>
+
+              <select id="filter-status" class="admin-form-control" style="max-width: 150px;" onchange="applyAlbumFilters()">
+                <option value="all">All Status</option>
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+              </select>
+            </div>
+
+            <button class="admin-btn admin-btn-outline admin-btn-sm" onclick="resetAlbumFilters()">Reset Filters</button>
+          </div>
+        </div>
+
         <div class="admin-card">
           <div class="admin-card-header">
-            <h3 class="admin-card-title">Archival Albums</h3>
+            <h3 class="admin-card-title">Archival Albums Registry</h3>
+            <span id="album-count-badge" class="admin-badge admin-badge-primary">0 Albums</span>
           </div>
           <div class="admin-table-wrapper">
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Year</th>
-                  <th>Album Title</th>
-                  <th>Images</th>
+                  <th style="width: 70px;">Cover</th>
+                  <th style="width: 80px;">Year</th>
+                  <th>Album Title & Details</th>
+                  <th>Category</th>
+                  <th>Event Date</th>
+                  <th>Photos</th>
                   <th>Status</th>
-                  <th>Actions</th>
+                  <th style="text-align: right;">Actions</th>
                 </tr>
               </thead>
               <tbody id="albums-table-body">
-                <tr><td colspan="5" style="text-align: center;">Loading albums...</td></tr>
+                <tr><td colspan="8" style="text-align: center; padding: 2rem;">Loading albums...</td></tr>
               </tbody>
             </table>
           </div>
@@ -126,77 +183,178 @@
     </main>
   </div>
 
-  <!-- Modal: Create Album -->
+  <!-- Modal: Create / Edit Album -->
   <div id="album-modal" class="admin-modal-overlay">
-    <div class="admin-modal">
+    <div class="admin-modal" style="max-width: 740px;">
       <div class="admin-modal-header">
-        <h3>Create Photo Album</h3>
+        <h3 id="album-modal-title">Create Photo Album</h3>
         <button class="admin-modal-close" onclick="closeAlbumModal()">&times;</button>
       </div>
       <div class="admin-modal-body">
         <form id="album-form">
           <div class="admin-form-row">
             <div class="admin-form-group">
-              <label class="admin-form-label" for="album-year">Year</label>
-              <input type="number" id="album-year" class="admin-form-control" required min="1923" max="2100" placeholder="2026">
+              <label class="admin-form-label" for="album-title">Album Title *</label>
+              <input type="text" id="album-title" class="admin-form-control" required placeholder="e.g. Centenary Harish-Chandra Memorial Colloquium">
             </div>
             <div class="admin-form-group">
-              <label class="admin-form-label" for="album-title">Album Title</label>
-              <input type="text" id="album-title" class="admin-form-control" required placeholder="e.g. Centenary Commemoration Gallery">
+              <label class="admin-form-label" for="album-year">Event / Celebration Year *</label>
+              <input type="number" id="album-year" class="admin-form-control" required min="1923" max="2100" placeholder="2026">
+            </div>
+          </div>
+
+          <div class="admin-form-row">
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="album-category">Category *</label>
+              <select id="album-category" class="admin-form-control" onchange="toggleCustomCategoryInput()">
+                <option value="Institutional Events">Institutional Events</option>
+                <option value="Inauguration">Inauguration</option>
+                <option value="Annual Memorial Lecture">Annual Memorial Lecture</option>
+                <option value="Birth Anniversary Celebration">Birth Anniversary Celebration</option>
+                <option value="Workshops & Conferences">Workshops & Conferences</option>
+                <option value="Student Activities">Student Activities</option>
+                <option value="Historical Archives">Historical Archives</option>
+                <option value="Other">Other / Custom</option>
+              </select>
+            </div>
+            <div class="admin-form-group" id="custom-category-group" style="display: none;">
+              <label class="admin-form-label" for="album-custom-category">Custom Category Name</label>
+              <input type="text" id="album-custom-category" class="admin-form-control" placeholder="Specify category...">
+            </div>
+            <div class="admin-form-group" id="event-date-group">
+              <label class="admin-form-label" for="album-date">Event Date (Optional)</label>
+              <input type="date" id="album-date" class="admin-form-control">
+            </div>
+          </div>
+
+          <div class="admin-form-row">
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="album-order">Display Order (Lower appears first)</label>
+              <input type="number" id="album-order" class="admin-form-control" value="0" min="0">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="album-cover-url">Cover Image URL</label>
+              <input type="text" id="album-cover-url" class="admin-form-control" placeholder="https://... or choose from photos below">
             </div>
           </div>
 
           <div class="admin-form-group">
-            <label class="admin-form-label" for="album-desc">Description</label>
-            <textarea id="album-desc" rows="3" class="admin-form-control" placeholder="Context of the photographs..."></textarea>
+            <label class="admin-form-label" for="album-cover-file">Or Upload Cover Image (Supabase Storage)</label>
+            <input type="file" id="album-cover-file" class="admin-form-control" accept="image/png, image/jpeg, image/webp">
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-form-label" for="album-desc">Description / Archival Context</label>
+            <textarea id="album-desc" rows="3" class="admin-form-control" placeholder="Contextual documentation of the events, dignitaries present, or historical significance..."></textarea>
           </div>
 
           <div class="admin-form-group">
             <label class="admin-form-check">
               <input type="checkbox" id="album-published" checked>
-              <span>Publish album publicly</span>
+              <span style="font-weight: 600;">Publish album publicly on Harish-Chandra website</span>
             </label>
           </div>
 
-          <div style="display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.5rem;">
-            <button type="button" class="admin-btn admin-btn-outline" onclick="closeAlbumModal()">Cancel</button>
-            <button type="submit" class="admin-btn admin-btn-primary">Save Album</button>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.8rem; border-top: 1px solid var(--admin-border); padding-top: 1.2rem;">
+            <button type="button" class="admin-btn admin-btn-outline" onclick="previewCurrentAlbumFromModal()">Preview Album</button>
+            <div style="display: flex; gap: 0.6rem;">
+              <button type="button" class="admin-btn admin-btn-outline" onclick="closeAlbumModal()">Cancel</button>
+              <button type="submit" class="admin-btn admin-btn-primary" id="album-submit-btn">Save Album</button>
+            </div>
           </div>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- Modal: Add Image to Album -->
-  <div id="image-modal" class="admin-modal-overlay">
-    <div class="admin-modal">
+  <!-- Modal: Manage Album Photographs -->
+  <div id="photo-manager-modal" class="admin-modal-overlay">
+    <div class="admin-modal admin-modal-xl">
       <div class="admin-modal-header">
-        <h3>Add Archival Photograph</h3>
-        <button class="admin-modal-close" onclick="closeImageModal()">&times;</button>
+        <div>
+          <h3 id="photo-modal-album-title">Manage Photographs</h3>
+          <span style="font-size: 0.8rem; color: var(--admin-text-muted);" id="photo-modal-subtitle">Album: Loading...</span>
+        </div>
+        <button class="admin-modal-close" onclick="closePhotoManagerModal()">&times;</button>
       </div>
       <div class="admin-modal-body">
-        <form id="image-upload-form">
-          <div class="admin-form-group">
-            <label class="admin-form-label" for="img-caption">Caption / Historical Title</label>
-            <input type="text" id="img-caption" class="admin-form-control" required placeholder="e.g. Lighting of the lamp at CSJMU Kanpur">
+        
+        <!-- Batch Upload & Add Section -->
+        <div class="admin-card" style="padding: 1.2rem; background: #F8FAFC;">
+          <h4 style="margin: 0 0 0.8rem; font-size: 0.95rem; color: var(--admin-sidebar);">Upload Photographs to Album</h4>
+          <div class="batch-upload-box" onclick="document.getElementById('batch-photo-files').click()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width: 36px; height: 36px; stroke: var(--admin-blue); margin-bottom: 0.4rem;">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <div style="font-size: 0.9rem; font-weight: 600; color: var(--admin-sidebar);">Click or Drag & Drop Multiple Images Here</div>
+            <div style="font-size: 0.76rem; color: var(--admin-text-muted); margin-top: 0.2rem;">Select multiple PNG, JPG, or WEBP photos (Aspect ratio auto-detected as 16:9 Landscape or 9:16 Portrait)</div>
+            <input type="file" id="batch-photo-files" multiple accept="image/png, image/jpeg, image/webp" style="display: none;" onchange="handleBatchPhotoUpload(event)">
           </div>
 
-          <div class="admin-form-row">
-            <div class="admin-form-group">
-              <label class="admin-form-label" for="img-url">Image URL (Optional)</label>
-              <input type="text" id="img-url" class="admin-form-control" placeholder="assets/gallery/... or external link">
-            </div>
-            <div class="admin-form-group">
-              <label class="admin-form-label" for="img-file">Upload Image File (Supabase Storage)</label>
-              <input type="file" id="img-file" class="admin-form-control" accept="image/png, image/jpeg, image/webp">
-            </div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div id="batch-upload-status" style="font-size: 0.8rem; color: var(--admin-blue); font-weight: 600;"></div>
+            <button type="button" class="admin-btn admin-btn-sm admin-btn-outline" onclick="toggleAddByUrlBox()">+ Add by Image URL</button>
           </div>
 
-          <div style="display: flex; justify-content: flex-end; gap: 0.6rem; margin-top: 1.5rem;">
-            <button type="button" class="admin-btn admin-btn-outline" onclick="closeImageModal()">Cancel</button>
-            <button type="submit" class="admin-btn admin-btn-primary">Attach Image</button>
+          <!-- Add by URL expandable panel -->
+          <div id="add-by-url-box" style="display: none; margin-top: 1rem; border-top: 1px dashed var(--admin-border); padding-top: 1rem;">
+            <div class="admin-form-row">
+              <div class="admin-form-group">
+                <label class="admin-form-label">Image URL</label>
+                <input type="text" id="url-photo-input" class="admin-form-control" placeholder="https://... or assets/gallery/...">
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Caption / Description</label>
+                <input type="text" id="url-caption-input" class="admin-form-control" placeholder="Caption for photograph...">
+              </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+              <button type="button" class="admin-btn admin-btn-sm admin-btn-outline" onclick="toggleAddByUrlBox()">Cancel</button>
+              <button type="button" class="admin-btn admin-btn-sm admin-btn-primary" onclick="addPhotoByUrl()">Attach URL</button>
+            </div>
           </div>
-        </form>
+        </div>
+
+        <!-- Photos Grid in Album -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+          <h4 style="margin: 0; font-size: 1rem; color: var(--admin-sidebar);">Photographs in this Album (<span id="album-photos-count">0</span>)</h4>
+          <span style="font-size: 0.75rem; color: var(--admin-text-muted);">Use ▲ ▼ to reorder. Star sets album cover image.</span>
+        </div>
+
+        <div id="album-photos-list" class="photo-manager-grid">
+          <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--admin-text-muted);">Loading photographs...</div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; border-top: 1px solid var(--admin-border); padding-top: 1.2rem;">
+          <button type="button" class="admin-btn admin-btn-outline" onclick="previewCurrentAlbumFromManager()">Preview Album</button>
+          <div style="display: flex; gap: 0.6rem;">
+            <button type="button" class="admin-btn admin-btn-outline" onclick="closePhotoManagerModal()">Done</button>
+            <button type="button" class="admin-btn admin-btn-primary" onclick="saveAllPhotoDetails()">Save Changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Live Album Preview -->
+  <div id="preview-modal" class="admin-modal-overlay">
+    <div class="admin-modal admin-modal-xl">
+      <div class="admin-modal-header">
+        <div>
+          <h3>Public Preview: <span id="preview-album-title" style="color: var(--admin-blue);">Album</span></h3>
+          <span style="font-size: 0.78rem; color: var(--admin-text-muted);">Rendered exactly as visitors will see it on the website</span>
+        </div>
+        <button class="admin-modal-close" onclick="closePreviewModal()">&times;</button>
+      </div>
+      <div class="admin-modal-body" style="background: #FDFBF7;">
+        <div class="preview-container" id="preview-content-box">
+          <!-- Live rendered preview injected here -->
+        </div>
+        <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="button" class="admin-btn admin-btn-primary" onclick="closePreviewModal()">Close Preview</button>
+        </div>
       </div>
     </div>
   </div>
