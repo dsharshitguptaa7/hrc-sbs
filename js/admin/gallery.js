@@ -19,11 +19,13 @@ let allAlbums = [];
 let currentAlbumId = null;
 let currentAlbumPhotos = [];
 let editingAlbumId = null;
+let isBatchUploading = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
   await HRC_AUTH.init(true);
   await loadAlbums();
   setupAlbumForm();
+  setupBatchUploader();
 });
 
 /**
@@ -631,8 +633,28 @@ async function openPhotoManager(albumId) {
 
   document.getElementById('photo-modal-album-title').textContent = `Manage Photographs: ${album.title}`;
   document.getElementById('photo-modal-subtitle').textContent = `${album.year} · ${album.category || 'Institutional Events'}`;
-  document.getElementById('batch-upload-status').textContent = '';
+  const statusEl = document.getElementById('batch-upload-status');
+  if (statusEl) {
+    statusEl.textContent = '';
+    statusEl.style.color = 'var(--admin-blue)';
+  }
   document.getElementById('add-by-url-box').style.display = 'none';
+
+  const sb = getSupabase();
+  if (sb) {
+    try {
+      const { data: dbPhotos, error: fetchErr } = await sb
+        .from('gallery_images')
+        .select('*')
+        .eq('album_id', albumId)
+        .order('sort_order', { ascending: true });
+      if (!fetchErr && dbPhotos) {
+        album.gallery_images = dbPhotos;
+      }
+    } catch (e) {
+      console.warn('[HRC Admin] Error refreshing album photos:', e);
+    }
+  }
 
   currentAlbumPhotos = (album.gallery_images || []).map((img, idx) => ({
     ...img,
@@ -742,80 +764,288 @@ function detectIntrinsicOrientation(imgEl, index) {
 }
 
 /**
- * Handle Multiple Photo Upload (Batch)
+ * Trigger file selection dialog safely
  */
-async function handleBatchPhotoUpload(event) {
-  const files = Array.from(event.target.files);
-  if (!files.length || !currentAlbumId) return;
+function triggerBatchPhotoSelect() {
+  if (isBatchUploading) return;
+  const input = document.getElementById('batch-photo-files');
+  if (input) input.click();
+}
+
+/**
+ * Configure drag-and-drop listeners on upload dropzone
+ */
+function setupBatchUploader() {
+  const dropzone = document.getElementById('batch-upload-dropzone') || document.querySelector('.batch-upload-box');
+  if (!dropzone) return;
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropzone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!isBatchUploading) {
+        dropzone.classList.add('is-dragover');
+      }
+    });
+  });
+
+  ['dragleave', 'dragend'].forEach(eventName => {
+    dropzone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropzone.classList.remove('is-dragover');
+    });
+  });
+
+  dropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dropzone.classList.remove('is-dragover');
+    if (isBatchUploading) return;
+
+    const dt = e.dataTransfer;
+    if (dt && dt.files && dt.files.length) {
+      processBatchPhotoFiles(dt.files);
+    }
+  });
+
+  // Prevent accidental drop navigation outside dropzone
+  window.addEventListener('dragover', (e) => {
+    e.preventDefault();
+  }, false);
+  window.addEventListener('drop', (e) => {
+    e.preventDefault();
+  }, false);
+}
+
+/**
+ * Handle Multiple Photo Upload from file input change event
+ */
+function handleBatchPhotoUpload(event) {
+  const files = event.target.files;
+  if (files && files.length) {
+    processBatchPhotoFiles(files);
+  }
+}
+
+/**
+ * Core Batch Photo Upload Pipeline
+ * Supports PNG, JPG/JPEG, WEBP, handles drag-and-drop, validates formats & sizes,
+ * uploads to Supabase Storage, persists database records, cleans up orphans,
+ * tracks independent successes/failures, and refreshes the live photo list.
+ */
+async function processBatchPhotoFiles(fileList) {
+  if (!currentAlbumId) {
+    showToast('Please open an album before uploading photographs.', 'error');
+    return;
+  }
+
+  if (isBatchUploading) {
+    console.warn('[HRC Admin] Upload already in progress. Ignoring duplicate trigger.');
+    return;
+  }
+
+  const files = Array.from(fileList || []);
+  if (!files.length) return;
 
   const statusEl = document.getElementById('batch-upload-status');
+  const dropzone = document.getElementById('batch-upload-dropzone') || document.querySelector('.batch-upload-box');
+  const inputEl = document.getElementById('batch-photo-files');
   const album = allAlbums.find(a => a.id === currentAlbumId);
   const sb = getSupabase();
 
-  let uploadedCount = 0;
-  if (statusEl) statusEl.textContent = `Preparing to upload ${files.length} photograph(s)...`;
+  isBatchUploading = true;
+  if (dropzone) dropzone.classList.add('is-uploading');
+  if (inputEl) inputEl.disabled = true;
 
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (statusEl) statusEl.textContent = `Uploading photo ${i + 1} of ${files.length}: ${file.name}...`;
+  const successfulFiles = [];
+  const failedFiles = [];
 
-    try {
+  if (statusEl) {
+    statusEl.textContent = `Preparing to upload ${files.length} photograph(s)...`;
+    statusEl.style.color = 'var(--admin-blue)';
+  }
+
+  const validExts = ['.jpg', '.jpeg', '.png', '.webp'];
+  const validMimes = ['image/jpeg', 'image/png', 'image/webp'];
+  const maxFileSize = 5 * 1024 * 1024; // 5MB
+
+  try {
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const ext = '.' + (file.name.split('.').pop() || '').toLowerCase();
+
+      // 1. Validate file format
+      if (!validExts.includes(ext) && !validMimes.includes(file.type)) {
+        const reason = `Unsupported format "${ext || file.type}". Only PNG, JPG, and WEBP are supported.`;
+        console.warn(`[HRC Admin] File validation error for ${file.name}:`, reason);
+        failedFiles.push({ name: file.name, reason });
+        continue;
+      }
+
+      // 2. Validate file size
+      if (file.size > maxFileSize) {
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+        const reason = `File exceeds 5MB limit (${sizeMb} MB).`;
+        console.warn(`[HRC Admin] File size limit exceeded for ${file.name}:`, reason);
+        failedFiles.push({ name: file.name, reason });
+        continue;
+      }
+
+      if (statusEl) {
+        statusEl.textContent = `Uploading photo ${i + 1} of ${files.length}: ${file.name}...`;
+        statusEl.style.color = 'var(--admin-blue)';
+      }
+
       let imageUrl = '';
-      if (sb) {
-        imageUrl = await uploadToStorage(HRC_CONFIG.STORAGE_BUCKETS.PUBLIC_ASSETS, 'gallery', file);
-      } else {
-        imageUrl = URL.createObjectURL(file);
-      }
-
-      const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
-      const newOrder = currentAlbumPhotos.length;
-
-      const newPhoto = {
-        album_id: currentAlbumId,
-        image_url: imageUrl,
-        caption: cleanName,
-        alt_text: cleanName,
-        sort_order: newOrder
-      };
-
-      if (sb) {
-        // Attempt insert with orientation; if column does not exist yet, fallback to clean insert
-        let insertRes = await sb.from('gallery_images').insert([{ ...newPhoto, orientation }]).select();
-        if (insertRes.error && (insertRes.error.code === 'PGRST204' || String(insertRes.error.message).includes('orientation'))) {
-          insertRes = await sb.from('gallery_images').insert([newPhoto]).select();
+      try {
+        // 3. Pre-detect intrinsic orientation for instant rendering
+        let detectedOrientation = 'landscape';
+        try {
+          const tempImg = new Image();
+          const objectUrl = URL.createObjectURL(file);
+          await new Promise((resolve) => {
+            tempImg.onload = () => {
+              if (tempImg.naturalHeight > tempImg.naturalWidth * 1.15) {
+                detectedOrientation = 'portrait';
+              }
+              URL.revokeObjectURL(objectUrl);
+              resolve();
+            };
+            tempImg.onerror = () => {
+              URL.revokeObjectURL(objectUrl);
+              resolve();
+            };
+          });
+        } catch (e) {
+          // Non-blocking fallback
         }
-        if (insertRes.error) throw insertRes.error;
-        if (insertRes.data && insertRes.data[0]) newPhoto.id = insertRes.data[0].id;
-      } else {
-        newPhoto.id = 'img-' + Date.now() + '-' + i;
-      }
 
-      currentAlbumPhotos.push(newPhoto);
-      uploadedCount++;
-
-      // If album had no cover image, auto-set first uploaded image as cover
-      if (album && !album.cover_image_url && uploadedCount === 1) {
-        album.cover_image_url = imageUrl;
+        // 4. Upload to Supabase Storage
         if (sb) {
-          await sb.from('gallery_albums').update({ cover_image_url: imageUrl }).eq('id', currentAlbumId);
+          imageUrl = await uploadToStorage(HRC_CONFIG.STORAGE_BUCKETS.PUBLIC_ASSETS, 'gallery', file);
+        } else {
+          imageUrl = URL.createObjectURL(file);
         }
+
+        // 5. Insert record into database
+        const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ').trim() || 'Photograph';
+        const newOrder = currentAlbumPhotos.length;
+
+        const newPhoto = {
+          album_id: currentAlbumId,
+          image_url: imageUrl,
+          caption: cleanName,
+          alt_text: cleanName,
+          sort_order: newOrder
+        };
+
+        if (sb) {
+          const { data: insertData, error: insertError } = await sb
+            .from('gallery_images')
+            .insert([newPhoto])
+            .select();
+
+          if (insertError) {
+            console.error(`[HRC Admin] DB insert error on ${file.name}:`, insertError);
+            // Storage succeeded but database failed: clean up orphaned file
+            if (imageUrl) {
+              await deleteFromStorage(HRC_CONFIG.STORAGE_BUCKETS.PUBLIC_ASSETS, imageUrl);
+            }
+
+            let msg = insertError.message || 'Database insert failed.';
+            if (insertError.code === '42501') {
+              msg = 'Permission denied by database security policy. Administrator authentication required.';
+            }
+            throw new Error(msg);
+          }
+
+          if (insertData && insertData[0]) {
+            newPhoto.id = insertData[0].id;
+            newPhoto.created_at = insertData[0].created_at;
+          }
+        } else {
+          newPhoto.id = 'demo-' + Date.now() + '-' + i;
+        }
+
+        newPhoto.orientation = detectedOrientation;
+        currentAlbumPhotos.push(newPhoto);
+        successfulFiles.push(file.name);
+
+        // Auto-set first photograph as album cover if album has no cover image
+        if (album && !album.cover_image_url && currentAlbumPhotos.length === 1) {
+          album.cover_image_url = imageUrl;
+          if (sb) {
+            try {
+              await sb.from('gallery_albums').update({ cover_image_url: imageUrl }).eq('id', currentAlbumId);
+            } catch (coverErr) {
+              console.warn('[HRC Admin] Could not auto-set cover image:', coverErr);
+            }
+          }
+        }
+      } catch (err) {
+        console.error(`[HRC Admin] Failed to process ${file.name}:`, err);
+        failedFiles.push({ name: file.name, reason: err.message || 'Storage or database failure' });
       }
-    } catch (err) {
-      console.error(`[HRC Admin] Failed to upload ${file.name}:`, err);
-      showToast(`Notice on ${file.name}: ${err.message}`, 'error');
     }
+
+    // Refresh live photograph list from Supabase if any uploads succeeded
+    if (successfulFiles.length > 0 && sb) {
+      try {
+        const { data: freshPhotos, error: fetchErr } = await sb
+          .from('gallery_images')
+          .select('*')
+          .eq('album_id', currentAlbumId)
+          .order('sort_order', { ascending: true });
+
+        if (!fetchErr && freshPhotos) {
+          currentAlbumPhotos = freshPhotos;
+        }
+      } catch (refreshErr) {
+        console.warn('[HRC Admin] Photos refresh notice:', refreshErr);
+      }
+    }
+
+    if (album) {
+      album.gallery_images = [...currentAlbumPhotos];
+    }
+
+    renderAlbumPhotosList();
+    updateMetrics();
+    applyAlbumFilters();
+
+    // Update status counter and notifications accurately
+    if (successfulFiles.length === files.length) {
+      if (statusEl) {
+        statusEl.textContent = `✓ Successfully uploaded ${successfulFiles.length} of ${files.length} photograph(s).`;
+        statusEl.style.color = 'var(--admin-success, #16A34A)';
+      }
+      showToast(`Successfully uploaded ${successfulFiles.length} of ${files.length} photograph(s).`, 'success');
+    } else if (successfulFiles.length > 0) {
+      if (statusEl) {
+        statusEl.textContent = `⚠ Successfully uploaded ${successfulFiles.length} of ${files.length} photograph(s). ${failedFiles.length} failed.`;
+        statusEl.style.color = 'var(--admin-gold, #D97706)';
+      }
+      showToast(`Uploaded ${successfulFiles.length} of ${files.length} photographs. ${failedFiles.length} failed.`, 'error');
+    } else {
+      const firstFailureReason = failedFiles[0]?.reason || 'Could not upload files.';
+      if (statusEl) {
+        statusEl.textContent = `✕ Upload failed for ${failedFiles.length} photograph(s). (${firstFailureReason})`;
+        statusEl.style.color = 'var(--admin-danger, #DC2626)';
+      }
+      showToast(`Upload failed: ${firstFailureReason}`, 'error');
+    }
+  } finally {
+    // Reset inputs & loading state
+    if (inputEl) {
+      inputEl.value = '';
+      inputEl.disabled = false;
+    }
+    if (dropzone) {
+      dropzone.classList.remove('is-uploading');
+    }
+    isBatchUploading = false;
   }
-
-  // Clear input
-  event.target.value = '';
-
-  if (album) {
-    album.gallery_images = [...currentAlbumPhotos];
-  }
-
-  renderAlbumPhotosList();
-  if (statusEl) statusEl.textContent = `✓ Successfully uploaded ${uploadedCount} photograph(s).`;
-  showToast(`Uploaded ${uploadedCount} photograph(s) to album.`);
 }
 
 function toggleAddByUrlBox() {

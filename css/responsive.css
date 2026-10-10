@@ -522,6 +522,27 @@
     gap: 1.4rem;
     padding: 1.8rem 0;
   }
+  .vc-leadership-mount {
+    padding: 1.5rem 0 0.8rem;
+  }
+  .vc-card {
+    padding: 2rem 1.4rem 1.8rem;
+    max-width: 380px;
+  }
+  .vc-card-photo-wrap {
+    width: 132px;
+    height: 132px;
+    margin-bottom: 1.15rem;
+  }
+  .vc-card-name {
+    font-size: 1.25rem;
+  }
+  .vc-card-designation {
+    font-size: 1.1rem;
+  }
+  .vc-card-institution {
+    font-size: 0.88rem;
+  }
   .people-group-toggle {
     padding: 1rem 1.2rem;
   }
@@ -543,6 +564,20 @@
     grid-template-columns: 1fr;
     gap: 1.4rem;
     padding: 1.5rem 0;
+  }
+  .vc-leadership-mount {
+    padding: 1.2rem 0 0.5rem;
+  }
+  .vc-card {
+    max-width: 100%;
+    padding: 1.8rem 1.2rem 1.6rem;
+  }
+  .vc-card-photo-wrap {
+    width: 124px;
+    height: 124px;
+  }
+  .vc-card-name {
+    font-size: 1.2rem;
   }
   .people-card {
     padding: 1.6rem 1.2rem;

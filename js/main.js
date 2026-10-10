@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initEventFiltering();
   initGlobalKeyboard();
   initPeopleCollapsibleGroups();
+  if (typeof renderVcLeadershipProfile === 'function') {
+    renderVcLeadershipProfile();
+  }
 });
 
 // Collapsible group logic for people.html
