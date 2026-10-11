@@ -60,7 +60,8 @@ async function uploadToStorage(bucket, path, file) {
     if (file.size > maxImageSize) throw new Error('Image file size exceeds 5MB limit.');
   }
 
-  const cleanFileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+  const uniquePrefix = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+  const cleanFileName = `${uniquePrefix}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
   const fullPath = path ? `${path.replace(/\/$/, '')}/${cleanFileName}` : cleanFileName;
 
   const { data, error } = await sb.storage
@@ -74,6 +75,34 @@ async function uploadToStorage(bucket, path, file) {
 
   const { data: urlData } = sb.storage.from(bucket).getPublicUrl(fullPath);
   return urlData.publicUrl;
+}
+
+/**
+ * Storage Helper: Remove a file from a designated bucket by path or public URL
+ */
+async function deleteFromStorage(bucket, pathOrUrl) {
+  const sb = getSupabase();
+  if (!sb || !pathOrUrl) return false;
+
+  try {
+    let objectPath = pathOrUrl;
+    const prefix = `/storage/v1/object/public/${bucket}/`;
+    if (pathOrUrl.includes(prefix)) {
+      objectPath = pathOrUrl.split(prefix)[1];
+    } else if (pathOrUrl.includes(`/${bucket}/`)) {
+      objectPath = pathOrUrl.split(`/${bucket}/`)[1];
+    }
+    objectPath = decodeURIComponent(objectPath).replace(/^\/+/, '');
+    const { error } = await sb.storage.from(bucket).remove([objectPath]);
+    if (error) {
+      console.warn('[HRC Storage] Remove error:', error);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.warn('[HRC Storage] Remove exception:', err);
+    return false;
+  }
 }
 
 /**

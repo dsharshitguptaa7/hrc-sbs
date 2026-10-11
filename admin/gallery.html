@@ -282,7 +282,7 @@
         <!-- Batch Upload & Add Section -->
         <div class="admin-card" style="padding: 1.2rem; background: #F8FAFC;">
           <h4 style="margin: 0 0 0.8rem; font-size: 0.95rem; color: var(--admin-sidebar);">Upload Photographs to Album</h4>
-          <div class="batch-upload-box" onclick="document.getElementById('batch-photo-files').click()">
+          <div class="batch-upload-box" id="batch-upload-dropzone" onclick="triggerBatchPhotoSelect()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width: 36px; height: 36px; stroke: var(--admin-blue); margin-bottom: 0.4rem;">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="17 8 12 3 7 8"></polyline>

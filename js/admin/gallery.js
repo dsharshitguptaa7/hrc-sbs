@@ -829,14 +829,97 @@ function handleBatchPhotoUpload(event) {
 }
 
 /**
+ * Utility: Wrap an asynchronous promise or thenable with a strict timeout to prevent indefinite hangs
+ */
+function withTimeout(promiseOrThenable, ms, stageName = 'Operation') {
+  let timerId;
+  const nativePromise = Promise.resolve(promiseOrThenable);
+  const timeoutPromise = new Promise((_, reject) => {
+    timerId = setTimeout(() => {
+      const err = new Error(`${stageName} timed out after ${Math.round(ms / 1000)}s. The server may still have processed the request; check the album before retrying to prevent duplicate files.`);
+      err.isTimeout = true;
+      reject(err);
+    }, ms);
+  });
+  return Promise.race([
+    nativePromise.then(
+      (res) => {
+        clearTimeout(timerId);
+        return res;
+      },
+      (err) => {
+        clearTimeout(timerId);
+        throw err;
+      }
+    ),
+    timeoutPromise
+  ]);
+}
+
+/**
+ * Utility: Non-blocking image orientation detector with fast timeout and guaranteed resolution
+ */
+async function detectOrientationSafe(file) {
+  if (typeof Image === 'undefined' || typeof URL === 'undefined') return 'landscape';
+  return new Promise((resolve) => {
+    try {
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+      let resolved = false;
+
+      const finish = (orientation) => {
+        if (!resolved) {
+          resolved = true;
+          try { URL.revokeObjectURL(objectUrl); } catch (e) {}
+          resolve(orientation);
+        }
+      };
+
+      const timer = setTimeout(() => finish('landscape'), 1200);
+
+      img.onload = () => {
+        clearTimeout(timer);
+        finish(img.naturalHeight > img.naturalWidth * 1.15 ? 'portrait' : 'landscape');
+      };
+      img.onerror = () => {
+        clearTimeout(timer);
+        finish('landscape');
+      };
+
+      // Ensure src is assigned AFTER attaching handlers
+      img.src = objectUrl;
+    } catch (e) {
+      resolve('landscape');
+    }
+  });
+}
+
+/**
  * Core Batch Photo Upload Pipeline
  * Supports PNG, JPG/JPEG, WEBP, handles drag-and-drop, validates formats & sizes,
  * uploads to Supabase Storage, persists database records, cleans up orphans,
  * tracks independent successes/failures, and refreshes the live photo list.
+ * 
+ * Implements 5 structured diagnostic stages with timeout protection:
+ * Stage 1: Validating file
+ * Stage 2: Uploading to Storage
+ * Stage 3: Saving photograph record
+ * Stage 4: Refreshing album
+ * Stage 5: Upload complete
  */
 async function processBatchPhotoFiles(fileList) {
+  const statusEl = document.getElementById('batch-upload-status');
+  const dropzone = document.getElementById('batch-upload-dropzone') || document.querySelector('.batch-upload-box');
+  const inputEl = document.getElementById('batch-photo-files');
+
   if (!currentAlbumId) {
-    showToast('Please open an album before uploading photographs.', 'error');
+    const msg = 'Please select and open an album before uploading photographs.';
+    console.warn('[HRC Admin] Upload aborted:', msg);
+    showToast(msg, 'error');
+    if (statusEl) {
+      statusEl.textContent = `✕ ${msg}`;
+      statusEl.style.color = 'var(--admin-danger, #DC2626)';
+    }
     return;
   }
 
@@ -848,9 +931,6 @@ async function processBatchPhotoFiles(fileList) {
   const files = Array.from(fileList || []);
   if (!files.length) return;
 
-  const statusEl = document.getElementById('batch-upload-status');
-  const dropzone = document.getElementById('batch-upload-dropzone') || document.querySelector('.batch-upload-box');
-  const inputEl = document.getElementById('batch-photo-files');
   const album = allAlbums.find(a => a.id === currentAlbumId);
   const sb = getSupabase();
 
@@ -861,11 +941,6 @@ async function processBatchPhotoFiles(fileList) {
   const successfulFiles = [];
   const failedFiles = [];
 
-  if (statusEl) {
-    statusEl.textContent = `Preparing to upload ${files.length} photograph(s)...`;
-    statusEl.style.color = 'var(--admin-blue)';
-  }
-
   const validExts = ['.jpg', '.jpeg', '.png', '.webp'];
   const validMimes = ['image/jpeg', 'image/png', 'image/webp'];
   const maxFileSize = 5 * 1024 * 1024; // 5MB
@@ -873,89 +948,114 @@ async function processBatchPhotoFiles(fileList) {
   try {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
+      const fileIndexStr = `(${i + 1}/${files.length})`;
+
+      // -------------------------------------------------------------
+      // STAGE 1: Validating file
+      // -------------------------------------------------------------
+      console.log(`[HRC Admin] [Stage 1/5: Validating file] ${fileIndexStr} "${file.name}" (${file.size} bytes, type: "${file.type}")`);
+      if (statusEl) {
+        statusEl.textContent = `[1/4] Validating file ${fileIndexStr}: ${file.name}...`;
+        statusEl.style.color = 'var(--admin-blue)';
+      }
+
       const ext = '.' + (file.name.split('.').pop() || '').toLowerCase();
 
-      // 1. Validate file format
       if (!validExts.includes(ext) && !validMimes.includes(file.type)) {
-        const reason = `Unsupported format "${ext || file.type}". Only PNG, JPG, and WEBP are supported.`;
-        console.warn(`[HRC Admin] File validation error for ${file.name}:`, reason);
-        failedFiles.push({ name: file.name, reason });
+        const reason = `Unsupported file format "${ext || file.type}". Only PNG, JPG, and WEBP photographs are supported.`;
+        console.warn(`[HRC Admin] Validation failed for "${file.name}": ${reason}`);
+        failedFiles.push({ name: file.name, reason, stage: 'Validation' });
         continue;
       }
 
-      // 2. Validate file size
       if (file.size > maxFileSize) {
         const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
-        const reason = `File exceeds 5MB limit (${sizeMb} MB).`;
-        console.warn(`[HRC Admin] File size limit exceeded for ${file.name}:`, reason);
-        failedFiles.push({ name: file.name, reason });
+        const reason = `File exceeds 5MB size limit (${sizeMb} MB).`;
+        console.warn(`[HRC Admin] Validation failed for "${file.name}": ${reason}`);
+        failedFiles.push({ name: file.name, reason, stage: 'Validation' });
         continue;
       }
 
+      // Safe non-blocking orientation detection for thumbnail display
+      const detectedOrientation = await detectOrientationSafe(file);
+
+      // -------------------------------------------------------------
+      // STAGE 2: Uploading to Storage
+      // -------------------------------------------------------------
+      console.log(`[HRC Admin] [Stage 2/5: Uploading to Storage] ${fileIndexStr} "${file.name}" to bucket "${HRC_CONFIG.STORAGE_BUCKETS.PUBLIC_ASSETS}"`);
       if (statusEl) {
-        statusEl.textContent = `Uploading photo ${i + 1} of ${files.length}: ${file.name}...`;
+        statusEl.textContent = `[2/4] Uploading to Storage ${fileIndexStr}: ${file.name}...`;
         statusEl.style.color = 'var(--admin-blue)';
       }
 
       let imageUrl = '';
       try {
-        // 3. Pre-detect intrinsic orientation for instant rendering
-        let detectedOrientation = 'landscape';
-        try {
-          const tempImg = new Image();
-          const objectUrl = URL.createObjectURL(file);
-          await new Promise((resolve) => {
-            tempImg.onload = () => {
-              if (tempImg.naturalHeight > tempImg.naturalWidth * 1.15) {
-                detectedOrientation = 'portrait';
-              }
-              URL.revokeObjectURL(objectUrl);
-              resolve();
-            };
-            tempImg.onerror = () => {
-              URL.revokeObjectURL(objectUrl);
-              resolve();
-            };
-          });
-        } catch (e) {
-          // Non-blocking fallback
-        }
-
-        // 4. Upload to Supabase Storage
         if (sb) {
-          imageUrl = await uploadToStorage(HRC_CONFIG.STORAGE_BUCKETS.PUBLIC_ASSETS, 'gallery', file);
+          imageUrl = await withTimeout(
+            uploadToStorage(HRC_CONFIG.STORAGE_BUCKETS.PUBLIC_ASSETS, 'gallery', file),
+            30000,
+            `Storage upload for "${file.name}"`
+          );
         } else {
           imageUrl = URL.createObjectURL(file);
         }
+        console.log(`[HRC Admin] Storage upload completed: ${imageUrl}`);
+      } catch (storageErr) {
+        console.error(`[HRC Admin] Storage upload failed for "${file.name}":`, storageErr);
+        const reason = storageErr.isTimeout
+          ? storageErr.message
+          : (storageErr.message || 'Storage upload error.');
+        failedFiles.push({ name: file.name, reason, stage: 'Storage Upload' });
+        continue;
+      }
 
-        // 5. Insert record into database
-        const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ').trim() || 'Photograph';
-        const newOrder = currentAlbumPhotos.length;
+      // -------------------------------------------------------------
+      // STAGE 3: Saving photograph record
+      // -------------------------------------------------------------
+      console.log(`[HRC Admin] [Stage 3/5: Saving photograph record] ${fileIndexStr} "${file.name}" to album ${currentAlbumId}`);
+      if (statusEl) {
+        statusEl.textContent = `[3/4] Saving photograph record ${fileIndexStr}: ${file.name}...`;
+        statusEl.style.color = 'var(--admin-blue)';
+      }
 
-        const newPhoto = {
-          album_id: currentAlbumId,
-          image_url: imageUrl,
-          caption: cleanName,
-          alt_text: cleanName,
-          sort_order: newOrder
-        };
+      const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ').trim() || 'Photograph';
+      const newOrder = currentAlbumPhotos.length;
 
+      const newPhoto = {
+        album_id: currentAlbumId,
+        image_url: imageUrl,
+        caption: cleanName,
+        alt_text: cleanName,
+        sort_order: newOrder
+      };
+
+      try {
         if (sb) {
-          const { data: insertData, error: insertError } = await sb
-            .from('gallery_images')
-            .insert([newPhoto])
-            .select();
+          const insertPromise = sb.from('gallery_images').insert([newPhoto]).select();
+          const { data: insertData, error: insertError } = await withTimeout(
+            insertPromise,
+            15000,
+            `Database insert for "${file.name}"`
+          );
 
           if (insertError) {
-            console.error(`[HRC Admin] DB insert error on ${file.name}:`, insertError);
-            // Storage succeeded but database failed: clean up orphaned file
+            console.error(`[HRC Admin] Database insert error for "${file.name}":`, insertError);
+
+            // Attempt safe orphan cleanup in Storage
             if (imageUrl) {
-              await deleteFromStorage(HRC_CONFIG.STORAGE_BUCKETS.PUBLIC_ASSETS, imageUrl);
+              try {
+                console.log(`[HRC Admin] Cleaning up orphaned storage object for "${file.name}"...`);
+                await deleteFromStorage(HRC_CONFIG.STORAGE_BUCKETS.PUBLIC_ASSETS, imageUrl);
+              } catch (cleanErr) {
+                console.warn('[HRC Admin] Orphan cleanup warning:', cleanErr);
+              }
             }
 
             let msg = insertError.message || 'Database insert failed.';
             if (insertError.code === '42501') {
-              msg = 'Permission denied by database security policy. Administrator authentication required.';
+              msg = 'Permission denied by database security policies. Please verify admin authentication.';
+            } else if (insertError.code === '23503') {
+              msg = 'Selected album record not found in database.';
             }
             throw new Error(msg);
           }
@@ -971,8 +1071,9 @@ async function processBatchPhotoFiles(fileList) {
         newPhoto.orientation = detectedOrientation;
         currentAlbumPhotos.push(newPhoto);
         successfulFiles.push(file.name);
+        console.log(`[HRC Admin] Photograph successfully saved to database: ID ${newPhoto.id}`);
 
-        // Auto-set first photograph as album cover if album has no cover image
+        // Auto-set cover image if album currently has none
         if (album && !album.cover_image_url && currentAlbumPhotos.length === 1) {
           album.cover_image_url = imageUrl;
           if (sb) {
@@ -983,38 +1084,58 @@ async function processBatchPhotoFiles(fileList) {
             }
           }
         }
-      } catch (err) {
-        console.error(`[HRC Admin] Failed to process ${file.name}:`, err);
-        failedFiles.push({ name: file.name, reason: err.message || 'Storage or database failure' });
+      } catch (dbErr) {
+        console.error(`[HRC Admin] DB insert stage failed for "${file.name}":`, dbErr);
+        failedFiles.push({ name: file.name, reason: dbErr.message || 'Database insert failed', stage: 'Database Insert' });
       }
     }
 
-    // Refresh live photograph list from Supabase if any uploads succeeded
-    if (successfulFiles.length > 0 && sb) {
-      try {
-        const { data: freshPhotos, error: fetchErr } = await sb
-          .from('gallery_images')
-          .select('*')
-          .eq('album_id', currentAlbumId)
-          .order('sort_order', { ascending: true });
+    // -------------------------------------------------------------
+    // STAGE 4: Refreshing album
+    // -------------------------------------------------------------
+    if (successfulFiles.length > 0) {
+      console.log(`[HRC Admin] [Stage 4/5: Refreshing album] ${currentAlbumId}`);
+      if (statusEl) {
+        statusEl.textContent = `[4/4] Refreshing album photographs...`;
+        statusEl.style.color = 'var(--admin-blue)';
+      }
 
-        if (!fetchErr && freshPhotos) {
-          currentAlbumPhotos = freshPhotos;
+      if (sb) {
+        try {
+          const fetchPromise = sb
+            .from('gallery_images')
+            .select('*')
+            .eq('album_id', currentAlbumId)
+            .order('sort_order', { ascending: true });
+
+          const { data: freshPhotos, error: fetchErr } = await withTimeout(
+            fetchPromise,
+            12000,
+            'Album refresh query'
+          );
+
+          if (!fetchErr && freshPhotos) {
+            currentAlbumPhotos = freshPhotos;
+          }
+        } catch (refreshErr) {
+          console.warn('[HRC Admin] Album refresh warning (in-memory list preserved):', refreshErr);
         }
-      } catch (refreshErr) {
-        console.warn('[HRC Admin] Photos refresh notice:', refreshErr);
       }
+
+      if (album) {
+        album.gallery_images = [...currentAlbumPhotos];
+      }
+
+      renderAlbumPhotosList();
+      updateMetrics();
+      applyAlbumFilters();
     }
 
-    if (album) {
-      album.gallery_images = [...currentAlbumPhotos];
-    }
+    // -------------------------------------------------------------
+    // STAGE 5: Upload complete
+    // -------------------------------------------------------------
+    console.log(`[HRC Admin] [Stage 5/5: Upload complete] Successful: ${successfulFiles.length}, Failed: ${failedFiles.length}`);
 
-    renderAlbumPhotosList();
-    updateMetrics();
-    applyAlbumFilters();
-
-    // Update status counter and notifications accurately
     if (successfulFiles.length === files.length) {
       if (statusEl) {
         statusEl.textContent = `✓ Successfully uploaded ${successfulFiles.length} of ${files.length} photograph(s).`;
@@ -1026,7 +1147,7 @@ async function processBatchPhotoFiles(fileList) {
         statusEl.textContent = `⚠ Successfully uploaded ${successfulFiles.length} of ${files.length} photograph(s). ${failedFiles.length} failed.`;
         statusEl.style.color = 'var(--admin-gold, #D97706)';
       }
-      showToast(`Uploaded ${successfulFiles.length} of ${files.length} photographs. ${failedFiles.length} failed.`, 'error');
+      showToast(`Uploaded ${successfulFiles.length} of ${files.length} photographs (${failedFiles.length} failed).`, 'error');
     } else {
       const firstFailureReason = failedFiles[0]?.reason || 'Could not upload files.';
       if (statusEl) {
@@ -1035,8 +1156,15 @@ async function processBatchPhotoFiles(fileList) {
       }
       showToast(`Upload failed: ${firstFailureReason}`, 'error');
     }
+  } catch (unexpectedErr) {
+    console.error('[HRC Admin] Unexpected upload failure:', unexpectedErr);
+    if (statusEl) {
+      statusEl.textContent = `✕ Upload error: ${unexpectedErr.message || 'An unexpected error occurred.'}`;
+      statusEl.style.color = 'var(--admin-danger, #DC2626)';
+    }
+    showToast(`Error: ${unexpectedErr.message || 'Upload failed'}`, 'error');
   } finally {
-    // Reset inputs & loading state
+    // ALWAYS reset loading state and clear inputs so UI is never stuck
     if (inputEl) {
       inputEl.value = '';
       inputEl.disabled = false;
@@ -1045,6 +1173,7 @@ async function processBatchPhotoFiles(fileList) {
       dropzone.classList.remove('is-uploading');
     }
     isBatchUploading = false;
+    console.log('[HRC Admin] Upload pipeline finished. Inputs unlocked.');
   }
 }
 
