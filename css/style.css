@@ -386,7 +386,7 @@ nav[aria-label="Primary Navigation"],
   display: flex;
   align-items: center;
   list-style: none;
-  gap: 0.35rem;
+  gap: 0.25rem;
   flex-wrap: nowrap;
   margin: 0;
   padding: 0;
@@ -398,42 +398,46 @@ nav[aria-label="Primary Navigation"],
   font-size: 0.74rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.035em;
   color: var(--navy);
-  padding: 0.35rem 0.35rem;
+  padding: 0.4rem 0.38rem;
   position: relative;
   transition: color var(--transition-fast);
   white-space: nowrap;
   display: inline-block;
+  line-height: 1.2;
 }
 
 .nav-link::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 0.35rem;
-  right: 0.35rem;
+  left: 0.38rem;
+  right: 0.38rem;
   width: 0%;
   height: 2px;
   background-color: var(--gold);
   transition: width var(--transition-fast);
 }
 
-.nav-link:hover,
+.nav-link:hover {
+  color: var(--gold-hover);
+}
+
 .nav-link.active {
   color: var(--navy);
 }
 
 .nav-link:hover::after,
 .nav-link.active::after {
-  width: calc(100% - 0.7rem);
+  width: calc(100% - 0.76rem);
 }
 
-/* Digital Legacy highlighted nav item */
+/* Digital Legacy highlighted nav item (editorial badge style) */
 .nav-link.nav-highlight {
   color: var(--navy);
   background-color: var(--gold-soft);
-  padding: 0.3rem 0.55rem;
+  padding: 0.32rem 0.55rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-gold);
   white-space: nowrap;
@@ -447,6 +451,40 @@ nav[aria-label="Primary Navigation"],
 .nav-link.nav-highlight.active {
   background-color: var(--gold);
   color: #FFFFFF;
+  border-color: var(--gold);
+}
+
+/* Certificates Button — Global Standard (Gold Accent #C9A227) */
+.nav-link.nav-cert-btn {
+  color: #FFFFFF;
+  background-color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 0.38rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  box-shadow: 0 2px 6px rgba(201, 162, 39, 0.25);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+}
+
+.nav-link.nav-cert-btn::after {
+  display: none;
+}
+
+.nav-link.nav-cert-btn:hover,
+.nav-link.nav-cert-btn:focus {
+  background-color: var(--gold-hover);
+  border-color: var(--gold-hover);
+  color: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(201, 162, 39, 0.35);
+  transform: translateY(-1px);
+}
+
+.nav-link.nav-cert-btn.active {
+  background-color: var(--navy);
+  border-color: var(--gold);
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(11, 31, 51, 0.25);
 }
 
 /* Mobile Nav Toggle */

@@ -24,14 +24,15 @@ async function loadDashboardMetrics() {
   }
 
   try {
-    const [events, series, speakers, posters, gallery, research, exhibition] = await Promise.all([
+    const [events, series, speakers, posters, gallery, research, exhibition, certs] = await Promise.all([
       sb.from('events').select('id', { count: 'exact', head: true }),
       sb.from('lecture_series').select('id', { count: 'exact', head: true }),
       sb.from('speakers').select('id', { count: 'exact', head: true }),
       sb.from('posters').select('id', { count: 'exact', head: true }),
       sb.from('gallery_images').select('id', { count: 'exact', head: true }),
       sb.from('research_papers').select('id', { count: 'exact', head: true }),
-      sb.from('exhibition_projects').select('id', { count: 'exact', head: true })
+      sb.from('exhibition_projects').select('id', { count: 'exact', head: true }),
+      sb.from('site_settings').select('value').eq('key', 'cert_participants').single()
     ]);
 
     setStat('stat-events', events.count ?? 0);
@@ -41,6 +42,9 @@ async function loadDashboardMetrics() {
     setStat('stat-gallery', gallery.count ?? 0);
     setStat('stat-research', research.count ?? 0);
     setStat('stat-exhibition', exhibition.count ?? 12);
+
+    const certList = certs.data?.value || [];
+    setStat('stat-certificates', Array.isArray(certList) ? certList.length : 3);
   } catch (err) {
     console.error('[HRC Admin] Error loading metrics:', err);
   }

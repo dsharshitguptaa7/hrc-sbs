@@ -8,12 +8,12 @@
    -------------------------------------------------------------------------- */
 @media screen and (max-width: 1360px) {
   .header-inner {
-    padding: 0.6rem 1.15rem;
-    gap: 0.75rem;
+    padding: 0.55rem 1rem;
+    gap: 0.6rem;
   }
 
   .brand-lockup {
-    gap: 0.55rem;
+    gap: 0.5rem;
   }
 
   .brand-logos {
@@ -34,53 +34,58 @@
   }
 
   .brand-separator {
-    height: 22px;
+    height: 20px;
   }
 
   .brand-title {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
   }
 
   .brand-subtitle {
-    font-size: 0.61rem;
-    letter-spacing: 0.04em;
+    font-size: 0.6rem;
+    letter-spacing: 0.035em;
   }
 
   .brand-institution {
-    font-size: 0.58rem;
+    font-size: 0.56rem;
   }
 
   .nav-menu {
-    gap: 0.2rem;
+    gap: 0.15rem;
   }
 
   .nav-link {
-    font-size: 0.69rem;
-    padding: 0.3rem 0.24rem;
-    letter-spacing: 0.025em;
+    font-size: 0.68rem;
+    padding: 0.35rem 0.28rem;
+    letter-spacing: 0.02em;
   }
 
   .nav-link::after {
-    left: 0.24rem;
-    right: 0.24rem;
+    left: 0.28rem;
+    right: 0.28rem;
   }
 
   .nav-link:hover::after,
   .nav-link.active::after {
-    width: calc(100% - 0.48rem);
+    width: calc(100% - 0.56rem);
   }
 
   .nav-link.nav-highlight {
     padding: 0.25rem 0.45rem;
   }
+
+  .nav-link.nav-cert-btn {
+    padding: 0.32rem 0.65rem;
+    font-size: 0.68rem;
+  }
 }
 
 /* --------------------------------------------------------------------------
-   Narrow Desktops & Switch to Mobile/Tablet Menu (<= 1120px)
+   Compact Desktops & Switch to Accessible Drawer Menu (<= 1160px)
    -------------------------------------------------------------------------- */
-@media screen and (max-width: 1120px) {
+@media screen and (max-width: 1160px) {
   .site-header .nav-menu {
-    display: none; /* Switch cleanly to drawer menu before navigation becomes cramped */
+    display: none; /* Switch cleanly to drawer menu before navigation items can ever clip or wrap */
   }
 
   .nav-toggle {
@@ -493,6 +498,27 @@
 .mobile-nav-links a.nav-highlight:hover,
 .mobile-nav-links a.nav-highlight:focus {
   background-color: var(--gold);
+  color: #FFFFFF;
+}
+
+.mobile-nav-links a.nav-cert-btn {
+  color: #FFFFFF;
+  background-color: var(--gold);
+  border: 1px solid var(--gold);
+  font-weight: 700;
+}
+
+.mobile-nav-links a.nav-cert-btn:hover,
+.mobile-nav-links a.nav-cert-btn:focus {
+  background-color: var(--gold-hover);
+  border-color: var(--gold-hover);
+  color: #FFFFFF;
+  padding-left: 0.75rem;
+}
+
+.mobile-nav-links a.nav-cert-btn.active {
+  background-color: var(--navy);
+  border-color: var(--gold);
   color: #FFFFFF;
 }
 

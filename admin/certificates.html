@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Participation Certificates | Harish-Chandra CMS</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/admin.css">
+
+  <style>
+    .cert-tabs-bar {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid var(--admin-border);
+      margin-bottom: 1.5rem;
+    }
+    .cert-tab-btn {
+      padding: 0.7rem 1.4rem;
+      font-weight: 600;
+      font-size: 0.86rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      color: var(--admin-text-muted);
+      transition: all 0.2s;
+    }
+    .cert-tab-btn:hover {
+      color: var(--admin-blue);
+    }
+    .cert-tab-btn.active {
+      color: var(--admin-blue);
+      border-bottom-color: var(--admin-gold);
+      font-weight: 700;
+    }
+    .cert-tab-pane {
+      display: none;
+    }
+    .cert-tab-pane.active {
+      display: block;
+    }
+    .sig-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.4rem;
+    }
+    .sig-card {
+      background: #FFFFFF;
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      padding: 1.4rem;
+    }
+    .sig-preview-box {
+      height: 90px;
+      background: #F8FAFC;
+      border: 1px dashed var(--admin-border);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .sig-preview-box img {
+      max-height: 80px;
+      max-width: 90%;
+      object-fit: contain;
+    }
+    .canvas-preview-wrap {
+      width: 100%;
+      max-width: 1000px;
+      background: #0B1F33;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      margin: 0 auto;
+    }
+    .canvas-preview-wrap canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <a href="dashboard.html" class="admin-sidebar-brand">
+        <img src="../assets/logo/hrc-logo.png" alt="HRC Logo">
+        <div class="admin-brand-info">
+          <h4>Harish-Chandra</h4>
+          <span>CMS Control Panel</span>
+        </div>
+      </a>
+      <nav class="admin-nav">
+        <div class="admin-nav-group-title">Overview</div>
+        <a href="dashboard.html" class="admin-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Dashboard
+        </a>
+        <div class="admin-nav-group-title">Participation & Certification</div>
+        <a href="certificates.html" class="admin-nav-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+          Participation Certificates
+        </a>
+        <div class="admin-nav-group-title">Lecture Archive</div>
+        <a href="lectures.html" class="admin-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          Lecture Series
+        </a>
+        <a href="speakers.html" class="admin-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          Distinguished Speakers
+        </a>
+        <div class="admin-nav-group-title">Events & Visuals</div>
+        <a href="events.html" class="admin-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Events Calendar
+        </a>
+        <a href="coordinators.html" class="admin-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Event Coordinators
+        </a>
+        <a href="posters.html" class="admin-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          Posters Archive
+        </a>
+        <a href="gallery.html" class="admin-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><path d="M7 7h10v10H7z"></path></svg>
+          Photo Albums
+        </a>
+        <div class="admin-nav-group-title">Research & Exhibition</div>
+        <a href="research.html" class="admin-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Research Papers
+        </a>
+        <a href="exhibition.html" class="admin-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          Digital Legacy 2026
+        </a>
+        <a href="announcements.html" class="admin-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          Announcements
+        </a>
+        <a href="settings.html" class="admin-nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          Site Settings
+        </a>
+      </nav>
+      <div class="admin-user-profile">
+        <div class="admin-user-info">
+          <span class="admin-user-name" id="admin-profile-name">Loading...</span>
+          <span class="admin-user-role" id="admin-profile-role">admin</span>
+        </div>
+        <button class="admin-logout-btn" onclick="HRC_AUTH.logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 18px; height: 18px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <button class="admin-mobile-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+        <span class="admin-topbar-title">Participation Certificates Portal Management</span>
+        <div class="admin-topbar-actions">
+          <a href="../certificates.html" target="_blank" class="admin-view-site-link">View Public Download Portal ↗</a>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="admin-header-row">
+          <div>
+            <h1>Harish-Chandra Day Certificates</h1>
+            <p>Manage year-wise releases, track competitions, issue verifiable participation certificates, and configure official signatories.</p>
+          </div>
+          <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+            <button class="admin-btn admin-btn-outline" onclick="openCsvImportModal()">📥 Bulk Import CSV</button>
+            <button class="admin-btn admin-btn-outline" onclick="exportParticipantsCsv()">📊 Export CSV Report</button>
+            <button class="admin-btn admin-btn-primary" onclick="openAddParticipantModal()">+ Add Participant</button>
+          </div>
+        </div>
+
+        <!-- STATS METRICS -->
+        <div class="admin-stats-grid">
+          <div class="admin-stat-card">
+            <span class="admin-stat-label">Total Participants</span>
+            <div class="admin-stat-value" id="metric-total-participants">0</div>
+          </div>
+          <div class="admin-stat-card">
+            <span class="admin-stat-label">Issued Certificates</span>
+            <div class="admin-stat-value" id="metric-issued-certs">0</div>
+          </div>
+          <div class="admin-stat-card">
+            <span class="admin-stat-label">Published (Downloadable)</span>
+            <div class="admin-stat-value" id="metric-published-certs" style="color: var(--admin-success);">0</div>
+          </div>
+          <div class="admin-stat-card">
+            <span class="admin-stat-label">Revoked Certificates</span>
+            <div class="admin-stat-value" id="metric-revoked-certs" style="color: var(--admin-danger);">0</div>
+          </div>
+        </div>
+
+        <!-- NAVIGATION TABS BAR -->
+        <div class="cert-tabs-bar">
+          <button class="cert-tab-btn active" onclick="switchAdminTab('participants')">Participants Registry</button>
+          <button class="cert-tab-btn" onclick="switchAdminTab('releases')">Year-Wise Releases</button>
+          <button class="cert-tab-btn" onclick="switchAdminTab('competitions')">Competitions & Tracks</button>
+          <button class="cert-tab-btn" onclick="switchAdminTab('signatories')">Signatories Configuration</button>
+        </div>
+
+        <!-- TAB 1: PARTICIPANTS REGISTRY -->
+        <div class="cert-tab-pane active" id="pane-participants">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Participant & Certificate Records</h3>
+              <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
+                <input type="text" id="search-participant" class="admin-form-control" placeholder="Search name, ID, team, email..." style="width: 240px; padding: 0.4rem 0.8rem;">
+                <select id="filter-cert-year" class="admin-form-control" style="width: 170px; padding: 0.4rem 0.8rem;">
+                  <option value="all">All Event Years</option>
+                </select>
+                <select id="filter-cert-status" class="admin-form-control" style="width: 140px; padding: 0.4rem 0.8rem;">
+                  <option value="all">All Statuses</option>
+                  <option value="published">Published</option>
+                  <option value="issued">Issued</option>
+                  <option value="unissued">Unissued</option>
+                  <option value="revoked">Revoked</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Participant Name</th>
+                    <th>Competition / Track</th>
+                    <th>Year</th>
+                    <th>Certificate ID</th>
+                    <th>Claim Code</th>
+                    <th>Issue Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="participants-table-body">
+                  <tr><td colspan="8" style="text-align: center;">Loading participant records...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: YEAR-WISE RELEASES -->
+        <div class="cert-tab-pane" id="pane-releases">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h3 class="admin-card-title">Year-Wise Certificate Releases</h3>
+                <p style="font-size: 0.78rem; color: var(--admin-text-muted); margin: 0.2rem 0 0;">Create and publish participation certificate distributions across academic years without altering code.</p>
+              </div>
+              <button class="admin-btn admin-btn-sm admin-btn-primary" onclick="openCreateReleaseModal()">+ Create Release</button>
+            </div>
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Release Title</th>
+                    <th>Event Year</th>
+                    <th>Status</th>
+                    <th>Release Date</th>
+                    <th>Attached Tracks & Participants</th>
+                    <th>Download Availability</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="releases-table-body">
+                  <tr><td colspan="7" style="text-align: center;">Loading releases...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: COMPETITIONS & TRACKS -->
+        <div class="cert-tab-pane" id="pane-competitions">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h3 class="admin-card-title">Competition Registry</h3>
+                <p style="font-size: 0.78rem; color: var(--admin-text-muted); margin: 0.2rem 0 0;">Register academic competitions, colloquia, exhibition tracks, and student contests.</p>
+              </div>
+              <button class="admin-btn admin-btn-sm admin-btn-primary" onclick="openCreateCompetitionModal()">+ Add Competition</button>
+            </div>
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Competition Name</th>
+                    <th>Code</th>
+                    <th>Year</th>
+                    <th>Format</th>
+                    <th>Participants</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="competitions-table-body">
+                  <tr><td colspan="6" style="text-align: center;">Loading competitions...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: SIGNATORIES CONFIGURATION -->
+        <div class="cert-tab-pane" id="pane-signatories">
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <div>
+                <h3 class="admin-card-title">Official Signatories Configuration</h3>
+                <p style="font-size: 0.78rem; color: var(--admin-text-muted); margin: 0.2rem 0 0;">
+                  Official Left-to-Right Hierarchy: Deputy Director (Left) → Director (Center) → HOD Mathematics (Right).
+                  Upload approved transparent PNG signatures. If unavailable, clean signature lines will render automatically.
+                </p>
+              </div>
+            </div>
+            <div style="padding: 1.8rem;">
+              <form id="signatories-form">
+                <div class="sig-card-grid">
+                  <!-- SIGNATORY 1: DEPUTY DIRECTOR -->
+                  <div class="sig-card">
+                    <span class="admin-badge admin-badge-primary" style="margin-bottom: 0.8rem;">Signature 1 (Left)</span>
+                    <h4 style="margin: 0 0 1rem; color: var(--admin-sidebar);">Deputy Director</h4>
+                    <div class="sig-preview-box" id="sig-deputy-preview-wrap">
+                      <img id="sig-deputy-preview" src="" alt="Deputy Director Signature">
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Upload Signature Asset (PNG)</label>
+                      <input type="file" accept="image/png,image/jpeg,image/webp" class="admin-form-control" onchange="uploadSignatureAsset('deputy_director', this)">
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Printed Name</label>
+                      <input type="text" id="sig-deputy-name" class="admin-form-control" value="Prof. Anju Dixit" required>
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Designation</label>
+                      <input type="text" id="sig-deputy-desig" class="admin-form-control" value="Deputy Director" required>
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Institution</label>
+                      <input type="text" id="sig-deputy-inst" class="admin-form-control" value="School of Basic Sciences, CSJMU" required>
+                    </div>
+                  </div>
+
+                  <!-- SIGNATORY 2: DIRECTOR -->
+                  <div class="sig-card">
+                    <span class="admin-badge admin-badge-primary" style="margin-bottom: 0.8rem;">Signature 2 (Center)</span>
+                    <h4 style="margin: 0 0 1rem; color: var(--admin-sidebar);">Director</h4>
+                    <div class="sig-preview-box" id="sig-dir-preview-wrap">
+                      <img id="sig-dir-preview" src="" alt="Director Signature">
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Upload Signature Asset (PNG)</label>
+                      <input type="file" accept="image/png,image/jpeg,image/webp" class="admin-form-control" onchange="uploadSignatureAsset('director', this)">
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Printed Name</label>
+                      <input type="text" id="sig-dir-name" class="admin-form-control" value="Prof. R. K. Dwivedi" required>
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Designation</label>
+                      <input type="text" id="sig-dir-desig" class="admin-form-control" value="Director" required>
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Institution</label>
+                      <input type="text" id="sig-dir-inst" class="admin-form-control" value="School of Basic Sciences, CSJMU" required>
+                    </div>
+                  </div>
+
+                  <!-- SIGNATORY 3: HOD MATHEMATICS -->
+                  <div class="sig-card">
+                    <span class="admin-badge admin-badge-primary" style="margin-bottom: 0.8rem;">Signature 3 (Right)</span>
+                    <h4 style="margin: 0 0 1rem; color: var(--admin-sidebar);">HOD Mathematics</h4>
+                    <div class="sig-preview-box" id="sig-hod-preview-wrap">
+                      <img id="sig-hod-preview" src="" alt="HOD Mathematics Signature">
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Upload Signature Asset (PNG)</label>
+                      <input type="file" accept="image/png,image/jpeg,image/webp" class="admin-form-control" onchange="uploadSignatureAsset('hod_math', this)">
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Printed Name</label>
+                      <input type="text" id="sig-hod-name" class="admin-form-control" value="Dr. P. N. Pathak" required>
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Designation</label>
+                      <input type="text" id="sig-hod-desig" class="admin-form-control" value="Head of Department / Coordinator" required>
+                    </div>
+                    <div class="admin-form-group">
+                      <label class="admin-form-label">Institution</label>
+                      <input type="text" id="sig-hod-inst" class="admin-form-control" value="Department of Mathematics, SBS, CSJMU" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="margin-top: 1.5rem; text-align: right;">
+                  <button type="submit" class="admin-btn admin-btn-primary">Save Signatories Configuration</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: ADD / EDIT PARTICIPANT -->
+  <div id="participant-modal" class="admin-modal-overlay">
+    <div class="admin-modal" style="max-width: 620px;">
+      <div class="admin-modal-header">
+        <h3 id="participant-modal-title">Add Participant & Issue Certificate</h3>
+        <button class="admin-modal-close" onclick="closeParticipantModal()">&times;</button>
+      </div>
+      <form id="participant-form">
+        <div class="admin-modal-body">
+          <input type="hidden" id="part-id">
+
+          <div class="admin-form-group">
+            <label class="admin-form-label" for="part-name">Full Participant Name *</label>
+            <input type="text" id="part-name" class="admin-form-control" placeholder="e.g. Anshuman Tiwari" required>
+          </div>
+
+          <div class="admin-form-row">
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="part-email">Email Address (Optional)</label>
+              <input type="email" id="part-email" class="admin-form-control" placeholder="participant@institution.ac.in">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="part-team">Team Name (If Applicable)</label>
+              <input type="text" id="part-team" class="admin-form-control" placeholder="e.g. Digital Biography Track Team">
+            </div>
+          </div>
+
+          <div class="admin-form-row">
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="part-event-year">Event Year *</label>
+              <select id="part-event-year" class="admin-form-control" required></select>
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="part-competition-name">COMPETITION / TRACK *</label>
+              <input type="text" id="part-competition-name" class="admin-form-control" placeholder="e.g. Digital Legacy 2026 Academic Exhibition" required>
+            </div>
+          </div>
+
+          <div class="admin-form-row">
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="part-issue-date">Issue Date</label>
+              <input type="date" id="part-issue-date" class="admin-form-control">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="part-status">Initial Status</label>
+              <select id="part-status" class="admin-form-control">
+                <option value="published">Published (Available for download)</option>
+                <option value="issued">Issued (Awaiting release)</option>
+                <option value="unissued">Unissued</option>
+                <option value="revoked">Revoked</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="admin-btn admin-btn-outline" onclick="closeParticipantModal()">Cancel</button>
+          <button type="submit" class="admin-btn admin-btn-primary">Save Participant</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE / EDIT RELEASE -->
+  <div id="release-modal" class="admin-modal-overlay">
+    <div class="admin-modal" style="max-width: 580px;">
+      <div class="admin-modal-header">
+        <h3 id="release-modal-title">Certificate Release</h3>
+        <button class="admin-modal-close" onclick="closeReleaseModal()">&times;</button>
+      </div>
+      <form id="release-form">
+        <div class="admin-modal-body">
+          <input type="hidden" id="release-id">
+
+          <div class="admin-form-group">
+            <label class="admin-form-label" for="release-title">Release Title *</label>
+            <input type="text" id="release-title" class="admin-form-control" placeholder="e.g. Harish-Chandra Day 2026" required>
+          </div>
+
+          <div class="admin-form-row">
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="release-year">Event Year *</label>
+              <input type="number" id="release-year" class="admin-form-control" min="1923" max="2100" value="2026" required>
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="release-date">Release Date</label>
+              <input type="date" id="release-date" class="admin-form-control">
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-form-label" for="release-desc">Description / Instructions</label>
+            <textarea id="release-desc" class="admin-form-control" rows="2" placeholder="Instructions for participants..."></textarea>
+          </div>
+
+          <div class="admin-form-row">
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="release-status">Release Status</label>
+              <select id="release-status" class="admin-form-control">
+                <option value="draft">Draft (Restricted from public download)</option>
+                <option value="published">Published (Live & Downloadable)</option>
+                <option value="closed">Closed</option>
+              </select>
+            </div>
+            <div class="admin-form-group" style="display: flex; align-items: center; margin-top: 1.5rem;">
+              <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+                <input type="checkbox" id="release-download-enabled" checked>
+                Enable Participant Download
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="admin-btn admin-btn-outline" onclick="closeReleaseModal()">Cancel</button>
+          <button type="submit" class="admin-btn admin-btn-primary">Save Release</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE / EDIT COMPETITION -->
+  <div id="competition-modal" class="admin-modal-overlay">
+    <div class="admin-modal" style="max-width: 580px;">
+      <div class="admin-modal-header">
+        <h3 id="competition-modal-title">Competition Track</h3>
+        <button class="admin-modal-close" onclick="closeCompetitionModal()">&times;</button>
+      </div>
+      <form id="competition-form">
+        <div class="admin-modal-body">
+          <input type="hidden" id="comp-id">
+
+          <div class="admin-form-group">
+            <label class="admin-form-label" for="comp-name">Competition Track Name *</label>
+            <input type="text" id="comp-name" class="admin-form-control" placeholder="e.g. Digital Legacy 2026 Academic Exhibition" required>
+          </div>
+
+          <div class="admin-form-row">
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="comp-code">Track Code (Optional)</label>
+              <input type="text" id="comp-code" class="admin-form-control" placeholder="e.g. DL-2026">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label" for="comp-event-year">Event Year *</label>
+              <select id="comp-event-year" class="admin-form-control" required></select>
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-form-label" for="comp-desc">Description</label>
+            <textarea id="comp-desc" class="admin-form-control" rows="2" placeholder="Brief scope of the competition..."></textarea>
+          </div>
+
+          <div class="admin-form-group">
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+              <input type="checkbox" id="comp-team-enabled">
+              Allow Team Participation
+            </label>
+          </div>
+        </div>
+        <div class="admin-modal-footer">
+          <button type="button" class="admin-btn admin-btn-outline" onclick="closeCompetitionModal()">Cancel</button>
+          <button type="submit" class="admin-btn admin-btn-primary">Save Competition</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: BULK CSV IMPORT -->
+  <div id="csv-import-modal" class="admin-modal-overlay">
+    <div class="admin-modal" style="max-width: 580px;">
+      <div class="admin-modal-header">
+        <h3>Bulk Import Participants via CSV</h3>
+        <button class="admin-modal-close" onclick="closeCsvImportModal()">&times;</button>
+      </div>
+      <div class="admin-modal-body">
+        <p style="font-size: 0.84rem; color: var(--admin-text-muted); margin-bottom: 1.2rem;">
+          Upload a CSV file containing participant records. Expected headers: <code>Participant Name</code>, <code>Email</code>, <code>Competition</code>, <code>Team Name</code>.
+        </p>
+
+        <div class="admin-form-row">
+          <div class="admin-form-group">
+            <label class="admin-form-label" for="csv-target-year">Target Event Year</label>
+            <select id="csv-target-year" class="admin-form-control">
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+            </select>
+          </div>
+          <div class="admin-form-group" style="display: flex; align-items: center; margin-top: 1.5rem;">
+            <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer;">
+              <input type="checkbox" id="csv-auto-issue" checked>
+              Auto-Publish Certificates
+            </label>
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Select CSV File</label>
+          <input type="file" id="csv-file-input" accept=".csv,text/csv" class="admin-form-control">
+        </div>
+
+        <div id="csv-import-status" style="margin-top: 0.8rem; font-size: 0.82rem;"></div>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn-outline" onclick="closeCsvImportModal()">Cancel</button>
+        <button type="button" class="admin-btn admin-btn-primary" onclick="processCsvImport()">Import Participants</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: LIVE CERTIFICATE PREVIEW & PDF DOWNLOAD -->
+  <div id="certificate-preview-modal" class="admin-modal-overlay">
+    <div class="admin-modal" style="max-width: 1040px; width: 95%;">
+      <div class="admin-modal-header">
+        <h3>Certificate Preview (Official A4 Landscape)</h3>
+        <button class="admin-modal-close" onclick="closePreviewModal()">&times;</button>
+      </div>
+      <div class="admin-modal-body" style="padding: 1.2rem; background: #06111D;">
+        <div class="canvas-preview-wrap">
+          <canvas id="admin-cert-canvas"></canvas>
+        </div>
+      </div>
+      <div class="admin-modal-footer">
+        <button type="button" class="admin-btn admin-btn-outline" onclick="closePreviewModal()">Close Preview</button>
+        <button type="button" class="admin-btn admin-btn-gold" id="btn-admin-download-pdf" onclick="downloadPreviewPDF()">⬇ Download A4 Landscape PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REQUIRED DEPENDENCIES -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+  <!-- HRC CONFIG & CODE -->
+  <script src="../js/config.js"></script>
+  <script src="../js/supabase.js"></script>
+  <script src="../js/admin/auth.js"></script>
+  <script src="../js/certificate-generator.js"></script>
+  <script src="../js/admin/certificates.js"></script>
+
+  <script>
+    function switchAdminTab(tabKey) {
+      document.querySelectorAll('.cert-tab-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', btn.getAttribute('onclick').includes(tabKey));
+      });
+      document.querySelectorAll('.cert-tab-pane').forEach(p => {
+        p.classList.remove('active');
+      });
+      document.getElementById('pane-' + tabKey).classList.add('active');
+    }
+  </script>
+</body>
+</html>

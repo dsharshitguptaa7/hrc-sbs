@@ -408,3 +408,87 @@ CREATE POLICY "Admin can delete files"
         bucket_id IN ('public-assets', 'research-papers') 
         AND (public.is_admin_or_editor())
     );
+
+-- ============================================================================
+-- 14. PARTICIPATION CERTIFICATE PORTAL SCHEMAS & CONFIGURATIONS
+-- ============================================================================
+-- Certificate state and releases are managed with complete year-wise isolation.
+-- In production, the system synchronizes records through the hardened
+-- public.site_settings repository under keys:
+--   'cert_releases'        -> Year-wise distributions (2026, 2027, etc.)
+--   'cert_competitions'    -> Competitions, tracks, and academic events
+--   'cert_participants'    -> Secure participant and issued certificate registry
+--   'cert_signatories'     -> Official signatories configuration and transparent PNG assets
+--   'cert_public_registry' -> Verifiable public lookup hash index (SHA-256 claim codes & certificate IDs)
+--
+-- For dedicated relational deployments, the following normalized schema is also available:
+CREATE TABLE IF NOT EXISTS public.certificate_releases (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title TEXT NOT NULL,
+    event_year INTEGER NOT NULL CHECK (event_year >= 1923 AND event_year <= 2100),
+    description TEXT,
+    status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'closed')),
+    release_date DATE DEFAULT CURRENT_DATE,
+    download_available BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now()),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+CREATE TABLE IF NOT EXISTS public.certificate_competitions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    release_id UUID REFERENCES public.certificate_releases(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    code TEXT,
+    event_year INTEGER NOT NULL,
+    description TEXT,
+    team_participation_enabled BOOLEAN NOT NULL DEFAULT false,
+    published BOOLEAN NOT NULL DEFAULT true,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+CREATE TABLE IF NOT EXISTS public.certificates (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    certificate_id TEXT UNIQUE NOT NULL,
+    claim_code TEXT,
+    full_name TEXT NOT NULL,
+    email TEXT,
+    team_name TEXT,
+    competition_id UUID REFERENCES public.certificate_competitions(id) ON DELETE SET NULL,
+    competition_name TEXT NOT NULL,
+    event_year INTEGER NOT NULL,
+    issue_date DATE NOT NULL DEFAULT CURRENT_DATE,
+    status TEXT NOT NULL DEFAULT 'published' CHECK (status IN ('unissued', 'issued', 'published', 'revoked')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+ALTER TABLE public.certificate_releases ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.certificate_competitions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.certificates ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read published releases"
+    ON public.certificate_releases FOR SELECT
+    USING (status = 'published' OR public.is_admin_or_editor());
+
+CREATE POLICY "Admin write certificate releases"
+    ON public.certificate_releases FOR ALL
+    USING (public.is_admin_or_editor())
+    WITH CHECK (public.is_admin_or_editor());
+
+CREATE POLICY "Public read certificate competitions"
+    ON public.certificate_competitions FOR SELECT
+    USING (published = true OR public.is_admin_or_editor());
+
+CREATE POLICY "Admin write certificate competitions"
+    ON public.certificate_competitions FOR ALL
+    USING (public.is_admin_or_editor())
+    WITH CHECK (public.is_admin_or_editor());
+
+CREATE POLICY "Public read published certificates"
+    ON public.certificates FOR SELECT
+    USING (status IN ('published', 'revoked') OR public.is_admin_or_editor());
+
+CREATE POLICY "Admin write certificates"
+    ON public.certificates FOR ALL
+    USING (public.is_admin_or_editor())
+    WITH CHECK (public.is_admin_or_editor());
+

@@ -61,11 +61,12 @@
           <li><a href="exhibition/index.html" class="nav-link nav-highlight">Digital Legacy</a></li>
           <li><a href="events.html" class="nav-link">Events</a></li>
           <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+          <li><a href="certificates.html" class="nav-link nav-cert-btn">Certificates</a></li>
           <li><a href="contact.html" class="nav-link">Contact</a></li>
         </ul>
       </nav>
 
-      <button class="nav-toggle" aria-label="Open Navigation Menu">
+      <button class="nav-toggle" aria-label="Open Navigation Menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -76,7 +77,7 @@
   </header>
 
   <!-- Mobile Drawer Menu -->
-  <div class="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+  <div class="mobile-nav-drawer" id="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation" aria-hidden="true">
     <div class="mobile-nav-panel">
       <div class="mobile-nav-header">
         <span class="drawer-title">Navigation Menu</span>
@@ -84,7 +85,7 @@
       </div>
       <ul class="mobile-nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="about.html" class="nav-highlight">About the Centre</a></li>
+        <li><a href="about.html">About the Centre</a></li>
         <li><a href="harishchandra.html">Harish-Chandra</a></li>
         <li><a href="research.html">Research & Taxonomy</a></li>
         <li><a href="lectures.html">Lecture Archive</a></li>
@@ -92,6 +93,7 @@
         <li><a href="exhibition/index.html">Digital Legacy 2026</a></li>
         <li><a href="events.html">Events & Seminars</a></li>
         <li><a href="gallery.html">Photo Archive</a></li>
+        <li><a href="certificates.html" class="nav-cert-btn">Participation Certificates</a></li>
         <li><a href="contact.html">Institutional Contact</a></li>
       </ul>
     </div>

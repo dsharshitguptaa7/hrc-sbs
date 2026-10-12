@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Participation Certificate | Harish-Chandra Research Centre</title>
+  <meta name="description" content="Official Participation Certificate Portal for Harish-Chandra Day academic events and competitions at School of Basic Sciences, CSJMU Kanpur in collaboration with IIT Kanpur.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .cert-portal-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-surface) 100%);
+      color: #FFFFFF;
+      padding: 4.5rem 0 3.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border-gold);
+    }
+    .cert-portal-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(201, 162, 39, 0.12), transparent 70%);
+      pointer-events: none;
+    }
+    .cert-portal-hero h1 {
+      font-family: var(--font-heading);
+      font-size: 2.6rem;
+      color: #FFFFFF;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.01em;
+    }
+    .cert-portal-hero p {
+      font-size: 1.05rem;
+      color: var(--champagne);
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .cert-lookup-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 2.2rem;
+      max-width: 760px;
+      margin: -2.5rem auto 3rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .cert-lookup-tabs {
+      display: flex;
+      background: var(--ivory);
+      padding: 0.35rem;
+      border-radius: var(--radius-sm);
+      gap: 0.35rem;
+      margin-bottom: 1.6rem;
+    }
+    .cert-lookup-tab {
+      flex: 1;
+      text-align: center;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--slate);
+      background: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .cert-lookup-tab:hover {
+      color: var(--navy);
+    }
+    .cert-lookup-tab.active {
+      background: #FFFFFF;
+      color: var(--navy);
+      box-shadow: 0 2px 6px rgba(11, 31, 51, 0.08);
+    }
+
+    .cert-result-container {
+      max-width: 980px;
+      margin: 0 auto 4rem;
+      display: none;
+    }
+    .cert-result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.4rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .cert-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .cert-badge-verified {
+      background: #DCFCE7;
+      color: #15803D;
+      border: 1px solid #BBF7D0;
+    }
+    .cert-badge-revoked {
+      background: #FEE2E2;
+      color: #B91C1C;
+      border: 1px solid #FECACA;
+    }
+
+    .cert-canvas-frame {
+      background: #0B1F33;
+      padding: 1.2rem;
+      border-radius: var(--radius-card);
+      box-shadow: 0 16px 40px rgba(11, 31, 51, 0.18);
+      border: 1px solid var(--border-gold);
+    }
+    .cert-canvas-frame canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 4px;
+    }
+
+    .cert-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.8rem;
+      padding: 1.4rem;
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+    }
+    .cert-meta-item label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--slate);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.25rem;
+    }
+    .cert-meta-item span {
+      font-size: 0.94rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 1.4rem;
+      text-align: left;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .form-control {
+      display: block;
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--navy);
+      background-color: #FFFFFF;
+      border: 1px solid rgba(11, 31, 51, 0.18);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 1px 2px rgba(11, 31, 51, 0.04);
+      box-sizing: border-box;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+    }
+    .form-control::placeholder {
+      color: var(--slate-light);
+      opacity: 0.85;
+      font-size: 0.9rem;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(30, 78, 121, 0.14);
+      background-color: #FFFFFF;
+    }
+    select.form-control {
+      appearance: auto;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- INSTITUTIONAL HEADER -->
+  <header class="site-header" role="banner">
+    <div class="header-topbar">
+      <div class="container">
+        <div class="header-topbar-collab">
+          <span>CSJMU Kanpur</span>
+          <span class="dot">×</span>
+          <span>IIT Kanpur</span>
+          <span class="dot">·</span>
+          <span>School of Basic Sciences</span>
+        </div>
+        <div class="header-topbar-contact">
+          <span>Official Participation Portal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-inner">
+      <a href="index.html" class="brand-lockup" aria-label="Harish-Chandra Research Centre Home">
+        <div class="brand-logos">
+          <img src="assets/logo/hrc-logo.png" alt="Harish-Chandra Research Centre Logo" class="brand-logo-img hrc-logo">
+          <div class="brand-separator"></div>
+          <img src="assets/logo/csjmu.png" alt="CSJMU Logo" class="brand-logo-img">
+          <img src="assets/logo/iitk.png" alt="IIT Kanpur Logo" class="brand-logo-img">
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Harish-Chandra Research Centre</span>
+          <span class="brand-subtitle">School of Basic Sciences</span>
+          <span class="brand-institution">CSJMU · Kanpur</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="harishchandra.html" class="nav-link">Harish-Chandra</a></li>
+          <li><a href="research.html" class="nav-link">Research</a></li>
+          <li><a href="lectures.html" class="nav-link">Lectures</a></li>
+          <li><a href="people.html" class="nav-link">People</a></li>
+          <li><a href="exhibition/index.html" class="nav-link nav-highlight">Digital Legacy</a></li>
+          <li><a href="events.html" class="nav-link">Events</a></li>
+          <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+          <li><a href="certificates.html" class="nav-link nav-cert-btn active">Certificates</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Mobile Nav Toggle -->
+      <button class="nav-toggle" aria-label="Open Navigation Menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-nav-drawer" id="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation" aria-hidden="true">
+    <div class="mobile-nav-panel">
+      <div class="mobile-nav-header">
+        <span class="drawer-title">Navigation Menu</span>
+        <button class="mobile-nav-close" aria-label="Close Navigation Menu">&times;</button>
+      </div>
+      <ul class="mobile-nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About the Centre</a></li>
+        <li><a href="harishchandra.html">Harish-Chandra</a></li>
+        <li><a href="research.html">Research & Taxonomy</a></li>
+        <li><a href="lectures.html">Lecture Archive</a></li>
+        <li><a href="people.html">Academic People</a></li>
+        <li><a href="exhibition/index.html">Digital Legacy 2026</a></li>
+        <li><a href="events.html">Events & Seminars</a></li>
+        <li><a href="gallery.html">Photo Archive</a></li>
+        <li><a href="certificates.html" class="nav-cert-btn active">Participation Certificates</a></li>
+        <li><a href="contact.html">Institutional Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section class="cert-portal-hero">
+    <div class="container">
+      <div class="chapter-badge">OFFICIAL ACADEMIC CREDENTIALS</div>
+      <h1>Harish-Chandra Day Participation Certificates</h1>
+      <p>
+        Retrieve and download your official, verifiable Certificate of Participation for Harish-Chandra Day competitions, exhibitions, and commemorative academic sessions.
+      </p>
+    </div>
+  </section>
+
+  <!-- LOOKUP PORTAL FORM -->
+  <section class="container">
+    <div class="cert-lookup-card">
+      <div class="cert-lookup-tabs">
+        <button type="button" class="cert-lookup-tab active" data-mode="id">By Certificate ID</button>
+        <button type="button" class="cert-lookup-tab" data-mode="claim">By Claim Code</button>
+        <button type="button" class="cert-lookup-tab" data-mode="email">By Registered Email</button>
+      </div>
+
+      <form id="cert-lookup-form">
+        <!-- MODE 1: BY CERTIFICATE ID -->
+        <div id="group-id" class="lookup-input-group">
+          <div class="form-group">
+            <label class="form-label" for="lookup-id">Unique Certificate ID *</label>
+            <input type="text" id="lookup-id" class="form-control" placeholder="e.g. HCD-2026-A1B2C3D4" style="text-transform: uppercase;">
+            <span style="font-size: 0.74rem; color: var(--slate); margin-top: 0.35rem; display: block;">
+              Enter the unique 16-character identifier printed on your certificate or notification slip.
+            </span>
+          </div>
+        </div>
+
+        <!-- MODE 2: BY CLAIM CODE -->
+        <div id="group-claim" class="lookup-input-group" style="display: none;">
+          <div class="form-group">
+            <label class="form-label" for="lookup-claim">Participant Claim Code *</label>
+            <input type="text" id="lookup-claim" class="form-control" placeholder="e.g. CLAIM-AT2026" style="text-transform: uppercase;">
+            <span style="font-size: 0.74rem; color: var(--slate); margin-top: 0.35rem; display: block;">
+              Enter the private claim voucher provided by your event coordinator.
+            </span>
+          </div>
+        </div>
+
+        <!-- MODE 3: BY REGISTERED EMAIL -->
+        <div id="group-email" class="lookup-input-group" style="display: none;">
+          <div style="display: grid; grid-template-columns: 1fr 180px; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="lookup-email">Registered Email Address *</label>
+              <input type="email" id="lookup-email" class="form-control" placeholder="name@institution.ac.in">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="lookup-year">Event Year *</label>
+              <select id="lookup-year" class="form-control"></select>
+            </div>
+          </div>
+          <span style="font-size: 0.74rem; color: var(--slate); margin-top: 0.35rem; display: block;">
+            Lookup uses privacy-preserving one-way cryptographic hashing to prevent participant list enumeration.
+          </span>
+        </div>
+
+        <!-- ERROR MESSAGE CONTAINER -->
+        <div id="cert-lookup-error" style="display: none; padding: 0.8rem 1rem; background: #FEE2E2; border: 1px solid #FECACA; border-radius: var(--radius-sm); color: #B91C1C; font-size: 0.84rem; margin-top: 1rem;"></div>
+
+        <div style="margin-top: 1.4rem; text-align: center;">
+          <button type="submit" id="cert-search-btn" class="btn btn-primary" style="padding: 0.75rem 2.2rem; font-size: 0.92rem;">
+            Find Certificate →
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- CERTIFICATE RESULT & DOWNLOAD SECTION -->
+    <div class="cert-result-container" id="cert-result-card">
+      <div class="cert-result-header">
+        <div>
+          <span id="res-status-badge" class="cert-badge cert-badge-verified">Verified & Official</span>
+          <h2 id="res-participant-name" style="font-family: var(--font-heading); font-size: 1.85rem; color: var(--navy); margin: 0.4rem 0 0.1rem;">Participant Name</h2>
+          <div style="color: var(--blue); font-weight: 600; font-size: 0.94rem;" id="res-competition-name">Competition Track Name</div>
+        </div>
+        <div style="display: flex; gap: 0.8rem; align-items: center;">
+          <a href="verify.html" id="res-verify-link" target="_blank" class="btn btn-sm btn-outline">Official Verification Page ↗</a>
+          <button type="button" id="btn-download-pdf" class="btn btn-gold btn-arrow" onclick="downloadCertificatePDF()">
+            ⬇ Download Official PDF (A4)
+          </button>
+        </div>
+      </div>
+
+      <!-- CANVAS HIGH-RESOLUTION PREVIEW -->
+      <div class="cert-canvas-frame">
+        <canvas id="certificate-preview-canvas"></canvas>
+      </div>
+
+      <!-- METADATA INFORMATION SUMMARY -->
+      <div class="cert-meta-grid">
+        <div class="cert-meta-item">
+          <label>Certificate ID</label>
+          <span id="res-cert-id" style="font-family: monospace;">HCD-2026-XXXXXXXX</span>
+        </div>
+        <div class="cert-meta-item">
+          <label>Event Year</label>
+          <span id="res-event-year">2026</span>
+        </div>
+        <div class="cert-meta-item" id="res-team-box" style="display: none;">
+          <label>Team Details</label>
+          <span id="res-team-name">—</span>
+        </div>
+        <div class="cert-meta-item">
+          <label>Date of Issue</label>
+          <span id="res-issue-date">October 11, 2026</span>
+        </div>
+        <div class="cert-meta-item">
+          <label>Issuing Authority</label>
+          <span>HRC-SBS, CSJMU × IIT Kanpur</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTITUTIONAL FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <div class="footer-brand">
+          <h3>Harish-Chandra Research Centre</h3>
+          <p>
+            School of Basic Sciences<br>
+            Chhatrapati Shahu Ji Maharaj University (CSJMU), Kanpur<br>
+            Uttar Pradesh 208024, India
+          </p>
+          <div class="footer-collab-note">
+            <span>In Academic Collaboration with IIT Kanpur</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">The Centre</div>
+          <ul class="footer-links">
+            <li><a href="about.html">About the Centre</a></li>
+            <li><a href="harishchandra.html">Harish-Chandra</a></li>
+            <li><a href="research.html">Research & Taxonomy</a></li>
+            <li><a href="lectures.html">Lecture Archive</a></li>
+            <li><a href="people.html">Academic People</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Certifications & Events</div>
+          <ul class="footer-links">
+            <li><a href="certificates.html">Download Certificates</a></li>
+            <li><a href="verify.html">Verify Certificate ID</a></li>
+            <li><a href="events.html">Events & Seminars</a></li>
+            <li><a href="gallery.html">Photo Archive</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-title">Digital Legacy 2026</div>
+          <ul class="footer-links">
+            <li><a href="exhibition/index.html">Exhibition Pavilion</a></li>
+            <li><a href="exhibition/biography.html">01 · Digital Biography</a></li>
+            <li><a href="exhibition/quiz.html">06 · Scholar Quiz</a></li>
+            <li><a href="contact.html">Institutional Contact</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          © 2026 Harish-Chandra Research Centre, School of Basic Sciences, CSJMU Kanpur. All rights reserved.
+        </div>
+        <div class="footer-developer-credit">
+          <span class="footer-dev-name">Designed & Developed by <strong>Harshit Gupta</strong></span>
+          <span class="footer-dev-qual">M.Sc. Mathematics with AI & DS</span>
+        </div>
+        <div class="footer-utility">
+          <a href="verify.html">Verification Portal</a>
+          <span>·</span>
+          <a href="admin/login.html" class="footer-admin-link">Admin Portal</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- REQUIRED DEPENDENCIES -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+  <!-- HRC SCRIPTS -->
+  <script src="js/config.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/certificate-generator.js"></script>
+  <script src="js/certificates-portal.js"></script>
+</body>
+</html>

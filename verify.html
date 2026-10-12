@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate Verification | Harish-Chandra Research Centre</title>
+  <meta name="description" content="Official Certificate Verification Portal for Harish-Chandra Day Participation Records at School of Basic Sciences, CSJMU Kanpur × IIT Kanpur.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <style>
+    .verify-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-surface) 100%);
+      color: #FFFFFF;
+      padding: 4.5rem 0 3.5rem;
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid var(--border-gold);
+    }
+    .verify-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 2.2rem;
+      max-width: 680px;
+      margin: -2.5rem auto 3rem;
+      position: relative;
+      z-index: 10;
+    }
+    .verify-status-banner {
+      display: flex;
+      gap: 1.2rem;
+      padding: 1.4rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 1.8rem;
+      align-items: flex-start;
+    }
+    .verify-status-banner.is-valid {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      color: #166534;
+    }
+    .verify-status-banner.is-valid .verify-status-icon {
+      background: #16A34A;
+      color: #FFFFFF;
+    }
+    .verify-status-banner.is-revoked {
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      color: #991B1B;
+    }
+    .verify-status-banner.is-revoked .verify-status-icon {
+      background: #DC2626;
+      color: #FFFFFF;
+    }
+    .verify-status-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .verify-status-banner h4 {
+      margin: 0 0 0.2rem;
+      font-size: 1.05rem;
+      font-family: var(--font-heading);
+    }
+    .verify-status-banner p {
+      margin: 0;
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+    .verify-data-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.9rem;
+    }
+    .verify-data-row:last-child {
+      border-bottom: none;
+    }
+    .verify-data-label {
+      color: var(--slate);
+      font-weight: 500;
+    }
+    .verify-data-val {
+      font-weight: 600;
+      color: var(--navy);
+      text-align: right;
+    }
+
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 1.4rem;
+      text-align: left;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .form-control {
+      display: block;
+      width: 100%;
+      padding: 0.85rem 1.15rem;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--navy);
+      background-color: #FFFFFF;
+      border: 1px solid rgba(11, 31, 51, 0.18);
+      border-radius: var(--radius-sm);
+      box-shadow: 0 1px 2px rgba(11, 31, 51, 0.04);
+      box-sizing: border-box;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+    }
+    .form-control::placeholder {
+      color: var(--slate-light);
+      opacity: 0.85;
+      font-size: 0.9rem;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(30, 78, 121, 0.14);
+      background-color: #FFFFFF;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="header-topbar">
+      <div class="container">
+        <div class="header-topbar-collab">
+          <span>CSJMU Kanpur</span>
+          <span class="dot">×</span>
+          <span>IIT Kanpur</span>
+          <span class="dot">·</span>
+          <span>School of Basic Sciences</span>
+        </div>
+        <div class="header-topbar-contact">
+          <span>Official Verification Registry</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-inner">
+      <a href="index.html" class="brand-lockup" aria-label="Harish-Chandra Research Centre Home">
+        <div class="brand-logos">
+          <img src="assets/logo/hrc-logo.png" alt="Harish-Chandra Research Centre Logo" class="brand-logo-img hrc-logo">
+          <div class="brand-separator"></div>
+          <img src="assets/logo/csjmu.png" alt="CSJMU Logo" class="brand-logo-img">
+          <img src="assets/logo/iitk.png" alt="IIT Kanpur Logo" class="brand-logo-img">
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Harish-Chandra Research Centre</span>
+          <span class="brand-subtitle">School of Basic Sciences</span>
+          <span class="brand-institution">CSJMU · Kanpur</span>
+        </div>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="harishchandra.html" class="nav-link">Harish-Chandra</a></li>
+          <li><a href="research.html" class="nav-link">Research</a></li>
+          <li><a href="lectures.html" class="nav-link">Lectures</a></li>
+          <li><a href="people.html" class="nav-link">People</a></li>
+          <li><a href="exhibition/index.html" class="nav-link nav-highlight">Digital Legacy</a></li>
+          <li><a href="events.html" class="nav-link">Events</a></li>
+          <li><a href="gallery.html" class="nav-link">Gallery</a></li>
+          <li><a href="certificates.html" class="nav-link nav-cert-btn">Certificates</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav-toggle" aria-label="Open Navigation Menu" aria-expanded="false" aria-controls="mobile-nav-drawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-nav-drawer" id="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation" aria-hidden="true">
+    <div class="mobile-nav-panel">
+      <div class="mobile-nav-header">
+        <span class="drawer-title">Navigation Menu</span>
+        <button class="mobile-nav-close" aria-label="Close Navigation Menu">&times;</button>
+      </div>
+      <ul class="mobile-nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About the Centre</a></li>
+        <li><a href="harishchandra.html">Harish-Chandra</a></li>
+        <li><a href="research.html">Research & Taxonomy</a></li>
+        <li><a href="lectures.html">Lecture Archive</a></li>
+        <li><a href="people.html">Academic People</a></li>
+        <li><a href="exhibition/index.html">Digital Legacy 2026</a></li>
+        <li><a href="events.html">Events & Seminars</a></li>
+        <li><a href="gallery.html">Photo Archive</a></li>
+        <li><a href="certificates.html" class="nav-cert-btn">Participation Certificates</a></li>
+        <li><a href="contact.html">Institutional Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="verify-hero">
+    <div class="container">
+      <div class="chapter-badge">ACADEMIC CREDENTIAL VERIFICATION</div>
+      <h1>Official Certificate Verification</h1>
+      <p>
+        Validate the authenticity and issuing status of any Harish-Chandra Day Participation Certificate issued by the Harish-Chandra Research Centre.
+      </p>
+    </div>
+  </section>
+
+  <!-- SEARCH CARD -->
+  <section class="container">
+    <div class="verify-card">
+      <form id="verify-form" style="margin-bottom: 1.5rem;">
+        <div class="form-group">
+          <label class="form-label" for="verify-search-input">Enter Unique Certificate ID</label>
+          <div style="display: flex; gap: 0.6rem;">
+            <input type="text" id="verify-search-input" class="form-control" placeholder="e.g. HCD-2026-A1B2C3D4" style="text-transform: uppercase;" required>
+            <button type="submit" class="btn btn-primary" style="flex-shrink: 0; padding: 0 1.5rem;">Verify ID</button>
+          </div>
+        </div>
+      </form>
+
+      <div id="verify-loading" style="display: none; text-align: center; padding: 1.5rem;">
+        <div class="loading-spinner" style="margin: 0 auto 0.5rem; width: 28px; height: 28px; border: 3px solid var(--border-light); border-top-color: var(--gold); border-radius: 50%;"></div>
+        <div style="font-size: 0.85rem; color: var(--slate);">Querying official institutional registry...</div>
+      </div>
+
+      <div id="verify-error" style="display: none; padding: 1rem; background: #FEE2E2; border: 1px solid #FECACA; border-radius: var(--radius-sm); color: #B91C1C; font-size: 0.86rem; margin-top: 1rem;"></div>
+
+      <div id="verify-result" style="display: none; margin-top: 1.5rem;">
+        <div id="res-status-banner" class="verify-status-banner is-valid"></div>
+
+        <div style="background: #F8FAFC; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.2rem; margin-bottom: 1.5rem;">
+          <div class="verify-data-row">
+            <span class="verify-data-label">Certificate ID</span>
+            <span class="verify-data-val" id="res-cert-id" style="font-family: monospace;">—</span>
+          </div>
+          <div class="verify-data-row">
+            <span class="verify-data-label">Participant Name</span>
+            <span class="verify-data-val" id="res-participant">—</span>
+          </div>
+          <div class="verify-data-row" id="res-team-row" style="display: none;">
+            <span class="verify-data-label">Team Name</span>
+            <span class="verify-data-val" id="res-team">—</span>
+          </div>
+          <div class="verify-data-row">
+            <span class="verify-data-label">Competition Track</span>
+            <span class="verify-data-val" id="res-competition">—</span>
+          </div>
+          <div class="verify-data-row">
+            <span class="verify-data-label">Event Year</span>
+            <span class="verify-data-val" id="res-year">—</span>
+          </div>
+          <div class="verify-data-row">
+            <span class="verify-data-label">Date of Issue</span>
+            <span class="verify-data-val" id="res-date">—</span>
+          </div>
+          <div class="verify-data-row">
+            <span class="verify-data-label">Issuing Body</span>
+            <span class="verify-data-val">Harish-Chandra Research Centre, SBS, CSJMU × IIT Kanpur</span>
+          </div>
+        </div>
+
+        <div style="text-align: center;">
+          <a href="#" id="res-download-btn" class="btn btn-gold btn-arrow">
+            Go to Certificate Download Portal
+            <span class="btn-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>
+          © 2026 Harish-Chandra Research Centre, School of Basic Sciences, CSJMU Kanpur. All rights reserved.
+        </div>
+        <div class="footer-utility">
+          <a href="certificates.html">Certificate Portal</a>
+          <span>·</span>
+          <a href="admin/login.html" class="footer-admin-link">Admin Portal</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/verify-portal.js"></script>
+</body>
+</html>
